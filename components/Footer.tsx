@@ -7,7 +7,7 @@ const groups = [
   { title: "African Dog Life", links: [{ title: "Dog Ownership in Nigeria", href: "/african-dog-life/nigeria" }, { title: "Nigerian Compound Dogs", href: "/african-dog-life/compound-dogs" }, { title: "Estate Dogs", href: "/african-dog-life/estate-dogs" }, { title: "Local African Dogs", href: "/topics/local-african-dogs" }] },
   { title: "Partnership", links: [{ title: "Partner With Us", href: "/partner-with-us" }, { title: "Partners", href: "/partners" }, { title: "For Trainers", href: "/partners/trainers" }, { title: "For Vets", href: "/partners/vets" }, { title: "For Breeders", href: "/partners/breeders" }, { title: "Directory", href: "/directory" }] },
   { title: "Public Distribution", links: [{ title: "Share The Dog Bond", href: "/share" }, { title: "Updates", href: "/updates" }, { title: "Campaigns", href: "/campaigns" }, { title: "Readiness Before Ownership", href: "/campaigns/readiness-before-ownership" }, { title: "Responsible Guard Dogs", href: "/campaigns/responsible-guard-dogs" }] },
-  { title: "Authority / Launch", links: [{ title: "Manifesto", href: "/manifesto" }, { title: "Press", href: "/press" }, { title: "Launch Checklist", href: "/launch-checklist" }, { title: "Launch Plan", href: "/launch-plan" }, { title: "Domain Guide", href: "/domain-guide" }, { title: "Status", href: "/status" }] },
+  { title: "Authority", links: [{ title: "Manifesto", href: "/manifesto" }, { title: "Press", href: "/press" }] },
   { title: "Trust", links: [{ title: "About", href: "/about" }, { title: "Editorial Policy", href: "/editorial-policy" }, { title: "Disclaimer", href: "/disclaimer" }, { title: "Contact", href: "/contact" }] }
 ];
 

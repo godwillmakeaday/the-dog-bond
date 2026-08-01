@@ -7,7 +7,7 @@ import { StaticContactCTA } from "@/components/StaticContactCTA";
 import { partnerCategories, partnerPrinciples } from "@/lib/partners";
 
 export const metadata: Metadata = {
-  title: "Partner With The Dog Bond | The Dog Bond",
+  title: "Partner With The Dog Bond",
   description: "Partnership standards for responsible trainers, vets, shelters, breeders, dog-care brands, estate managers, schools, and education partners."
 };
 

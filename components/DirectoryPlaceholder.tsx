@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { StaticContactCTA } from "@/components/StaticContactCTA";
 
 const futureCategories = [
@@ -28,7 +29,7 @@ export function DirectoryPlaceholder() {
               Future listings should be guided by humane care, honest claims, public safety, transparency, and respect for veterinary and training limits.
             </p>
           </section>
-          <a href="/partners" className="mt-8 inline-block rounded-full bg-earth-900 px-6 py-4 text-xs font-bold uppercase tracking-[0.16em] text-earth-50">See partner standards</a>
+          <Link href="/partners" className="mt-8 inline-block rounded-full bg-earth-900 px-6 py-4 text-xs font-bold uppercase tracking-[0.16em] text-earth-50">See partner standards</Link>
         </div>
       </section>
       <StaticContactCTA title="Directory interest" text="Responsible trainers, vets, shelters, breeders, estate partners, and education partners can express interest before directory intake opens." email="partners@thedogbond.com" />

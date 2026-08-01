@@ -7,7 +7,7 @@ import { dogTools } from "@/lib/tools";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
-export const metadata: Metadata = { title: "Dog Ownership Tools | The Dog Bond", description: "Practical tools for choosing, preparing for, training, and managing a dog responsibly." };
+export const metadata: Metadata = { title: "Dog Ownership Tools", description: "Practical tools for choosing, preparing for, training, and managing a dog responsibly." };
 const chooser = [{ title: "Unsure if you should get a dog", href: "/tools/readiness-checklist" }, { title: "Unsure what breed fits", href: "/tools/breed-comparison" }, { title: "Worried about cost", href: "/tools/cost-estimator" }, { title: "Want a guard dog", href: "/tools/guard-dog-checker" }, { title: "Already own a dog", href: "/tools/training-routine-planner" }];
 
 export default function ToolsPage() {

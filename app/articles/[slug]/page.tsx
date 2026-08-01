@@ -5,23 +5,27 @@ import { Header } from "@/components/Header";
 import { ReadinessBriefCTA } from "@/components/ReadinessBriefCTA";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { articles } from "@/lib/data";
+import { createPageMetadata } from "@/lib/metadata";
 
 export function generateStaticParams() {
   return articles.map((article) => ({ slug: article.slug }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const article = articles.find((item) => item.slug === params.slug);
   if (!article) {
     return { title: "Article" };
   }
-  return {
+  return createPageMetadata({
     title: article.title,
-    description: article.excerpt
-  };
+    description: article.excerpt,
+    pathname: `/articles/${article.slug}`,
+  });
 }
 
-export default function ArticleBriefPage({ params }: { params: { slug: string } }) {
+export default async function ArticleBriefPage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const article = articles.find((item) => item.slug === params.slug);
 
   if (!article) {

@@ -3,11 +3,14 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { LaunchCTA } from "@/components/LaunchCTA";
+import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: "Public Launch Checklist | The Dog Bond",
-  description: "A static launch readiness checklist for The Dog Bond platform, trust, SEO, distribution, domain, and first 30-day plan."
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "Public Launch Checklist",
+  description: "A static launch readiness checklist for The Dog Bond platform, trust, SEO, distribution, domain, and first 30-day plan.",
+  pathname: "/launch-checklist",
+  noIndex: true,
+});
 
 const groups = [
   {

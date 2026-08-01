@@ -44,10 +44,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/directory",
     "/manifesto",
     "/press",
-    "/launch-checklist",
-    "/launch-plan",
-    "/domain-guide",
-    "/status",
     "/dog-readiness-brief",
     "/tools/cost-estimator",
     "/tools/breed-comparison",
@@ -79,8 +75,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [...staticRoutes, ...articleRoutes, ...guideRoutes, ...topicRoutes, ...glossaryRoutes, ...mistakeRoutes, ...breedRoutes, ...partnerRoutes, ...campaignRoutes].map((route) => ({
     url: `${base}${route}`,
-    lastModified: new Date(),
+    lastModified: new Date("2026-07-06T15:55:27.561Z"),
     changeFrequency: route === "" ? "weekly" : "monthly",
-    priority: route === "" ? 1 : route.startsWith("/use-the-dog-bond") || route.startsWith("/partners") || route.startsWith("/campaigns") || route.startsWith("/manifesto") || route.startsWith("/press") || route.startsWith("/launch") || route.startsWith("/domain-guide") || route.startsWith("/status") || route.startsWith("/guides") || route.startsWith("/topics") || route.startsWith("/tools") ? 0.85 : 0.7
+    priority: route === "" ? 1 : route.startsWith("/use-the-dog-bond") || route.startsWith("/partners") || route.startsWith("/campaigns") || route.startsWith("/manifesto") || route.startsWith("/press") || route.startsWith("/guides") || route.startsWith("/topics") || route.startsWith("/tools") ? 0.85 : 0.7
   }));
 }

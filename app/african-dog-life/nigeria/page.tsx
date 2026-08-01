@@ -5,7 +5,7 @@ import { PageHero } from "@/components/PageHero";
 import { RelatedLinks } from "@/components/RelatedLinks";
 
 export const metadata: Metadata = {
-  title: "Dog Ownership in Nigeria | The Dog Bond",
+  title: "Dog Ownership in Nigeria",
   description: "A deep authority page on Nigerian dog ownership realities: compounds, estates, security dogs, local dogs, heat, feeding, public safety, children, visitors, neighbours, and responsible ownership."
 };
 

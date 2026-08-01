@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { SelectField } from "@/components/tools/SelectField";
 
 const baseRoutine = [
   ["Day 1", "Name recognition / attention"],
@@ -25,23 +26,14 @@ export function TrainingRoutinePlanner() {
     return "You can add more repetitions, but humane control and clarity remain the foundation.";
   }, [time, goal, experience]);
 
-  const Select = ({ label, value, setValue, options }: { label: string; value: string; setValue: (value: string) => void; options: string[] }) => (
-    <label className="block rounded-2xl border border-earth-200 bg-white p-5">
-      <span className="text-sm font-bold uppercase tracking-[0.18em] text-earth-500">{label}</span>
-      <select value={value} onChange={(event) => setValue(event.target.value)} className="mt-3 w-full rounded-xl border border-earth-200 bg-earth-50 px-4 py-3 text-earth-900">
-        {options.map((option) => <option key={option} value={option}>{option}</option>)}
-      </select>
-    </label>
-  );
-
   return (
     <section className="bg-earth-50 px-5 py-16 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Select label="Dog age" value={age} setValue={setAge} options={["puppy", "young dog", "adult dog"]} />
-          <Select label="Owner experience" value={experience} setValue={setExperience} options={["beginner", "intermediate", "experienced"]} />
-          <Select label="Main goal" value={goal} setValue={setGoal} options={["obedience", "leash control", "feeding discipline", "socialization", "calm visitor response"]} />
-          <Select label="Daily time available" value={time} setValue={setTime} options={["under 20 minutes", "20–45 minutes", "1 hour or more"]} />
+          <SelectField label="Dog age" value={age} setValue={setAge} options={["puppy", "young dog", "adult dog"]} />
+          <SelectField label="Owner experience" value={experience} setValue={setExperience} options={["beginner", "intermediate", "experienced"]} />
+          <SelectField label="Main goal" value={goal} setValue={setGoal} options={["obedience", "leash control", "feeding discipline", "socialization", "calm visitor response"]} />
+          <SelectField label="Daily time available" value={time} setValue={setTime} options={["under 20 minutes", "20–45 minutes", "1 hour or more"]} />
         </div>
 
         <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-7">

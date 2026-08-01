@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Dog Ownership Cost Estimator | The Dog Bond",
+  title: "Dog Ownership Cost Estimator",
   description: "Estimate the responsibility burden behind food, health care, training, shelter, and long-term dog ownership."
 };
 

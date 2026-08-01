@@ -6,7 +6,7 @@ import { RelatedLinks } from "@/components/RelatedLinks";
 import { StaticContactCTA } from "@/components/StaticContactCTA";
 
 export const metadata: Metadata = {
-  title: "Partner With Us | The Dog Bond",
+  title: "Partner With Us",
   description: "The original partnership entry point, now connected to the wider Dog Bond partnership system."
 };
 

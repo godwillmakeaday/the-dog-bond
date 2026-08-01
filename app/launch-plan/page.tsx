@@ -3,11 +3,14 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { LaunchCTA } from "@/components/LaunchCTA";
+import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: "First 30 Days Launch Plan | The Dog Bond",
-  description: "A static first 30-day content and distribution plan for launching The Dog Bond."
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "First 30 Days Launch Plan",
+  description: "A static first 30-day content and distribution plan for launching The Dog Bond.",
+  pathname: "/launch-plan",
+  noIndex: true,
+});
 
 const weeks = [
   {

@@ -11,7 +11,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Dog Ownership Knowledge Map | The Dog Bond",
+  title: "Dog Ownership Knowledge Map",
   description: "A structured map of dog ownership decisions, training, breed suitability, public safety, African dog life, and responsible ownership."
 };
 

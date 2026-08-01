@@ -4,19 +4,22 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { GlossaryPageLayout } from "@/components/GlossaryPageLayout";
 import { glossaryTerms } from "@/lib/glossary";
+import { createPageMetadata } from "@/lib/metadata";
 
-type Params = { params: { slug: string } };
+type Params = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
   return glossaryTerms.map((term) => ({ slug: term.slug }));
 }
 
-export function generateMetadata({ params }: Params): Metadata {
+export async function generateMetadata(props: Params): Promise<Metadata> {
+  const params = await props.params;
   const term = glossaryTerms.find((item) => item.slug === params.slug);
-  return term ? { title: `${term.term} | The Dog Bond Glossary`, description: term.shortDefinition } : { title: "Dog Ownership Glossary | The Dog Bond" };
+  return term ? createPageMetadata({ title: term.term, description: term.shortDefinition, pathname: `/glossary/${term.slug}` }) : { title: "Dog Ownership Glossary" };
 }
 
-export default function GlossaryTermPage({ params }: Params) {
+export default async function GlossaryTermPage(props: Params) {
+  const params = await props.params;
   const term = glossaryTerms.find((item) => item.slug === params.slug);
   if (!term) notFound();
   return <main><Header /><GlossaryPageLayout term={term} /><Footer /></main>;

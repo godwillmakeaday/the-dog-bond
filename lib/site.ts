@@ -3,7 +3,7 @@ export const site = {
   tagline: "Understanding man’s most social friend.",
   description:
     "The Dog Bond is a dog ownership intelligence platform for choosing, training, managing, and living responsibly with dogs in African households.",
-  url: "https://the-dog-bond.vercel.app"
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://the-dog-bond.vercel.app"
 };
 
 export const navItems = [

@@ -6,7 +6,7 @@ import { CampaignCard } from "@/components/CampaignCard";
 import { campaignPages } from "@/lib/campaigns";
 
 export const metadata: Metadata = {
-  title: "Dog Bond Public Education Campaigns | The Dog Bond",
+  title: "Dog Bond Public Education Campaigns",
   description: "Public education campaigns for readiness, humane training, responsible guard dogs, local African dogs, and dogs around children."
 };
 

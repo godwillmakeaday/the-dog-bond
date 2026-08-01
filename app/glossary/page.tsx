@@ -6,7 +6,7 @@ import { GlossaryCard } from "@/components/GlossaryCard";
 import { glossaryTerms } from "@/lib/glossary";
 
 export const metadata: Metadata = {
-  title: "Dog Ownership Glossary | The Dog Bond",
+  title: "Dog Ownership Glossary",
   description: "A structured glossary of dog ownership, training, protection, safety, and African dog-life terms."
 };
 

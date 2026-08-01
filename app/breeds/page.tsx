@@ -6,7 +6,7 @@ import { PageHero } from "@/components/PageHero";
 import { breedPages } from "@/lib/breeds";
 
 export const metadata: Metadata = {
-  title: "Dog Breed Authority Pages | The Dog Bond",
+  title: "Dog Breed Authority Pages",
   description: "Deeper breed-specific pages for suitability, family life, protection, African household fit, and owner readiness."
 };
 

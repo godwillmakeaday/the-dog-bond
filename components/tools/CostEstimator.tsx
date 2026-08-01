@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { RelatedLinks } from "@/components/RelatedLinks";
+import { SelectField } from "@/components/tools/SelectField";
 
 const weights = {
   size: { small: 1, medium: 2, large: 3, giant: 4 },
@@ -27,26 +28,17 @@ export function CostEstimator() {
     return { score, level, redFlag };
   }, [size, feeding, housing, vet, training, purpose]);
 
-  const Field = ({ label, value, setValue, options }: { label: string; value: string; setValue: (value: string) => void; options: string[] }) => (
-    <label className="block rounded-2xl border border-earth-200 bg-white p-5">
-      <span className="text-sm font-bold uppercase tracking-[0.18em] text-earth-500">{label}</span>
-      <select value={value} onChange={(event) => setValue(event.target.value)} className="mt-3 w-full rounded-xl border border-earth-200 bg-earth-50 px-4 py-3 text-earth-900">
-        {options.map((option) => <option key={option} value={option}>{option}</option>)}
-      </select>
-    </label>
-  );
-
   return (
     <>
       <section className="bg-earth-50 px-5 py-16 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.6fr_0.4fr]">
           <div className="grid gap-4 md:grid-cols-2">
-            <Field label="Dog size" value={size} setValue={setSize} options={["small", "medium", "large", "giant"]} />
-            <Field label="Feeding quality" value={feeding} setValue={setFeeding} options={["basic", "standard", "premium"]} />
-            <Field label="Housing type" value={housing} setValue={setHousing} options={["apartment", "family house", "compound", "farm"]} />
-            <Field label="Veterinary readiness" value={vet} setValue={setVet} options={["basic", "standard", "strong"]} />
-            <Field label="Training support" value={training} setValue={setTraining} options={["self-guided", "occasional trainer", "regular trainer"]} />
-            <Field label="Ownership purpose" value={purpose} setValue={setPurpose} options={["companionship", "family dog", "protection", "farm support"]} />
+            <SelectField label="Dog size" value={size} setValue={setSize} options={["small", "medium", "large", "giant"]} />
+            <SelectField label="Feeding quality" value={feeding} setValue={setFeeding} options={["basic", "standard", "premium"]} />
+            <SelectField label="Housing type" value={housing} setValue={setHousing} options={["apartment", "family house", "compound", "farm"]} />
+            <SelectField label="Veterinary readiness" value={vet} setValue={setVet} options={["basic", "standard", "strong"]} />
+            <SelectField label="Training support" value={training} setValue={setTraining} options={["self-guided", "occasional trainer", "regular trainer"]} />
+            <SelectField label="Ownership purpose" value={purpose} setValue={setPurpose} options={["companionship", "family dog", "protection", "farm support"]} />
           </div>
           <aside className="rounded-[2.5rem] bg-earth-950 p-8 text-earth-50 shadow-card">
             <p className="text-sm font-bold uppercase tracking-[0.24em] text-earth-300">Estimated responsibility level</p>

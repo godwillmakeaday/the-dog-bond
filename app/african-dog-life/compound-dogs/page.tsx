@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { RelatedLinks } from "@/components/RelatedLinks";
 
 export const metadata: Metadata = {
-  title: "Dogs in Nigerian Compounds | The Dog Bond",
+  title: "Dogs in Nigerian Compounds",
   description: "A deep page on gate control, visitors, children, feeding discipline, barking, neighbours, shelter, shade, suitable dog types, and owner mistakes in compound homes."
 };
 
@@ -34,9 +35,9 @@ export default function AfricanRealityPage() {
         <div className="mx-auto max-w-7xl">
           <h2 className="font-display text-4xl font-semibold text-earth-950">Continue this pathway</h2>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
-            <a href="/guides/best-dog-for-compound" className="rounded-2xl bg-white p-5 text-sm font-bold leading-6 text-earth-800 shadow-card transition hover:-translate-y-1">Best Dog for a Compound →</a>
-<a href="/guides/visitor-safety-with-dogs" className="rounded-2xl bg-white p-5 text-sm font-bold leading-6 text-earth-800 shadow-card transition hover:-translate-y-1">Visitor Safety With Dogs →</a>
-<a href="/tools/guard-dog-checker" className="rounded-2xl bg-white p-5 text-sm font-bold leading-6 text-earth-800 shadow-card transition hover:-translate-y-1">Guard Dog Checker →</a>
+            <Link href="/guides/best-dog-for-compound" className="rounded-2xl bg-white p-5 text-sm font-bold leading-6 text-earth-800 shadow-card transition hover:-translate-y-1">Best Dog for a Compound →</Link>
+<Link href="/guides/visitor-safety-with-dogs" className="rounded-2xl bg-white p-5 text-sm font-bold leading-6 text-earth-800 shadow-card transition hover:-translate-y-1">Visitor Safety With Dogs →</Link>
+<Link href="/tools/guard-dog-checker" className="rounded-2xl bg-white p-5 text-sm font-bold leading-6 text-earth-800 shadow-card transition hover:-translate-y-1">Guard Dog Checker →</Link>
           </div>
         </div>
       </section>

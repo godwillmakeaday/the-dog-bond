@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Guard Dog Responsibility Checker | The Dog Bond",
+  title: "Guard Dog Responsibility Checker",
   description: "A responsible-protection checker for households considering guard dogs or powerful dog breeds."
 };
 

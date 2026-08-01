@@ -6,7 +6,7 @@ import { LaunchCTA } from "@/components/LaunchCTA";
 import { RelatedLinks } from "@/components/RelatedLinks";
 
 export const metadata: Metadata = {
-  title: "The Dog Bond Manifesto | The Dog Bond",
+  title: "The Dog Bond Manifesto",
   description: "The public launch doctrine behind The Dog Bond: responsibility before breed power, humane training, African dog-life reality, and public safety."
 };
 

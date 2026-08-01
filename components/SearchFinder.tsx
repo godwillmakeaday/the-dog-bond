@@ -3,12 +3,12 @@
 import { useMemo, useState } from "react";
 import { popularSearches, searchIndex } from "@/lib/search";
 
-const types = ["All", "Guide", "Tool", "Article", "Topic", "Glossary", "Mistake", "Breed", "Partner", "Campaign", "Launch", "Page"] as const;
+const types = ["All", "Guide", "Tool", "Article", "Topic", "Glossary", "Mistake", "Breed", "Partner", "Campaign", "Page"] as const;
 
 type TypeFilter = (typeof types)[number];
 
-export function SearchFinder() {
-  const [query, setQuery] = useState("");
+export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
+  const [query, setQuery] = useState(initialQuery);
   const [type, setType] = useState<TypeFilter>("All");
 
   const results = useMemo(() => {

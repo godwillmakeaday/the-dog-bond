@@ -7,7 +7,7 @@ import { RelatedLinks } from "@/components/RelatedLinks";
 import { conversionPathways } from "@/lib/conversion";
 
 export const metadata: Metadata = {
-  title: "Use The Dog Bond | The Dog Bond",
+  title: "Use The Dog Bond",
   description: "Different pathways for dog owners, first-time buyers, families, guard-dog buyers, breed buyers, African households, and future partners."
 };
 

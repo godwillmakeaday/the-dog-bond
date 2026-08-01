@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Dog Readiness Checklist | The Dog Bond",
+  title: "Dog Readiness Checklist",
   description: "An interactive checklist for daily care, health responsibility, training, household safety, and long-term dog ownership commitment."
 };
 

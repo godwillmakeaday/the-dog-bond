@@ -4,19 +4,22 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { MistakePageLayout } from "@/components/MistakePageLayout";
 import { ownerMistakes } from "@/lib/mistakes";
+import { createPageMetadata } from "@/lib/metadata";
 
-type Params = { params: { slug: string } };
+type Params = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
   return ownerMistakes.map((mistake) => ({ slug: mistake.slug }));
 }
 
-export function generateMetadata({ params }: Params): Metadata {
+export async function generateMetadata(props: Params): Promise<Metadata> {
+  const params = await props.params;
   const mistake = ownerMistakes.find((item) => item.slug === params.slug);
-  return mistake ? { title: `${mistake.title} | The Dog Bond`, description: mistake.shortDescription } : { title: "Dog Owner Mistake | The Dog Bond" };
+  return mistake ? createPageMetadata({ title: mistake.title, description: mistake.shortDescription, pathname: `/mistakes/${mistake.slug}` }) : { title: "Dog Owner Mistake" };
 }
 
-export default function MistakePage({ params }: Params) {
+export default async function MistakePage(props: Params) {
+  const params = await props.params;
   const mistake = ownerMistakes.find((item) => item.slug === params.slug);
   if (!mistake) notFound();
   return <main><Header /><MistakePageLayout mistake={mistake} /><Footer /></main>;

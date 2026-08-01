@@ -11,7 +11,6 @@ export const metadata: Metadata = {
   },
   description: site.description,
   applicationName: site.name,
-  alternates: { canonical: site.url },
   keywords: [
     "dog ownership",
     "dog training",
@@ -28,13 +27,14 @@ export const metadata: Metadata = {
     title: "The Dog Bond | African Dog Ownership, Training & Breed Intelligence",
     description: site.description,
     type: "website",
-    url: site.url,
-    siteName: site.name
+    siteName: site.name,
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: site.name }]
   },
   twitter: {
     card: "summary_large_image",
     title: "The Dog Bond | African Dog Ownership, Training & Breed Intelligence",
-    description: site.description
+    description: site.description,
+    images: ["/opengraph-image"]
   },
   icons: {
     icon: "/mark.svg"

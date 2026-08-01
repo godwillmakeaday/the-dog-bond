@@ -6,7 +6,7 @@ import { SharePathwayCard } from "@/components/SharePathwayCard";
 import { sharePathways, suggestedShareMessages } from "@/lib/share";
 
 export const metadata: Metadata = {
-  title: "Share The Dog Bond | The Dog Bond",
+  title: "Share The Dog Bond",
   description: "Share responsible dog ownership pathways with people considering dogs, guard dogs, breeds, compounds, estates, training, and care."
 };
 

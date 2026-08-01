@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { SectionHeader } from "@/components/SectionHeader";
 import { ArticleGrid } from "@/components/ArticleGrid";
 
@@ -11,9 +12,9 @@ export function ArticleLibrary() {
             title="Article paths for authority, search, and public trust"
             text="The library is designed to grow into a serious content engine: behaviour guides, training notes, breed studies, safety essays, and African dog-life analysis."
           />
-          <a href="/articles" className="rounded-full border border-earth-300 px-6 py-4 text-center text-sm font-bold uppercase tracking-[0.18em] text-earth-900 transition hover:border-earth-900 hover:bg-earth-900 hover:text-earth-50">
+          <Link href="/articles" className="rounded-full border border-earth-300 px-6 py-4 text-center text-sm font-bold uppercase tracking-[0.18em] text-earth-900 transition hover:border-earth-900 hover:bg-earth-900 hover:text-earth-50">
             Open Articles
-          </a>
+          </Link>
         </div>
         <div className="mt-12">
           <ArticleGrid limit={6} />

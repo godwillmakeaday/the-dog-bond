@@ -5,7 +5,7 @@ import { PageHero } from "@/components/PageHero";
 import { DirectoryPlaceholder } from "@/components/DirectoryPlaceholder";
 
 export const metadata: Metadata = {
-  title: "Dog Bond Directory | The Dog Bond",
+  title: "Dog Bond Directory",
   description: "Future directory placeholder for responsible trainers, vets, shelters, breeders, estate partners, and education partners."
 };
 

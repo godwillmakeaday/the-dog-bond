@@ -3,11 +3,14 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { LaunchCTA } from "@/components/LaunchCTA";
+import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: "Domain Migration Guide | The Dog Bond",
-  description: "A static internal guide for moving The Dog Bond from Vercel subdomain to custom domain later."
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "Domain Migration Guide",
+  description: "A static internal guide for moving The Dog Bond from Vercel subdomain to custom domain later.",
+  pathname: "/domain-guide",
+  noIndex: true,
+});
 
 const before = ["confirm final brand spelling", "confirm email address", "confirm homepage title", "confirm canonical URL plan", "confirm Vercel project settings"];
 const after = ["update site.url in lib/site.ts", "update metadata", "update sitemap base URL", "test all pages", "submit sitemap to Google Search Console later", "use custom domain in public materials"];

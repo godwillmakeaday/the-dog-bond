@@ -4,19 +4,22 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PartnerPageLayout } from "@/components/PartnerPageLayout";
 import { partnerCategories } from "@/lib/partners";
+import { createPageMetadata } from "@/lib/metadata";
 
-type Params = { params: { slug: string } };
+type Params = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
   return partnerCategories.map((category) => ({ slug: category.slug }));
 }
 
-export function generateMetadata({ params }: Params): Metadata {
+export async function generateMetadata(props: Params): Promise<Metadata> {
+  const params = await props.params;
   const category = partnerCategories.find((item) => item.slug === params.slug);
-  return category ? { title: `${category.title} | The Dog Bond Partners`, description: category.summary } : { title: "Partner Category | The Dog Bond" };
+  return category ? createPageMetadata({ title: category.title, description: category.summary, pathname: `/partners/${category.slug}` }) : { title: "Partner Category" };
 }
 
-export default function PartnerCategoryPage({ params }: Params) {
+export default async function PartnerCategoryPage(props: Params) {
+  const params = await props.params;
   const category = partnerCategories.find((item) => item.slug === params.slug);
   if (!category) notFound();
   return <main><Header /><PartnerPageLayout category={category} /><Footer /></main>;

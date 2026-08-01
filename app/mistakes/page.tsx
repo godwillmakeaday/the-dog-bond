@@ -6,7 +6,7 @@ import { MistakeCard } from "@/components/MistakeCard";
 import { ownerMistakes } from "@/lib/mistakes";
 
 export const metadata: Metadata = {
-  title: "Dog Owner Mistake Library | The Dog Bond",
+  title: "Dog Owner Mistake Library",
   description: "Common dog ownership mistakes that create suffering, aggression, abandonment, neighbour conflict, and public risk."
 };
 

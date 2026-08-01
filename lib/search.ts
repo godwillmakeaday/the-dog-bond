@@ -9,7 +9,7 @@ import { topicPages } from "@/lib/topics";
 
 export type SearchItem = {
   title: string;
-  type: "Guide" | "Tool" | "Article" | "Page" | "Topic" | "Glossary" | "Mistake" | "Breed" | "Partner" | "Campaign" | "Launch";
+  type: "Guide" | "Tool" | "Article" | "Page" | "Topic" | "Glossary" | "Mistake" | "Breed" | "Partner" | "Campaign";
   category: string;
   description: string;
   href: string;
@@ -37,12 +37,8 @@ const pages: SearchItem[] = [
   { title: "Dog Bond Public Education Campaigns", type: "Campaign", category: "Campaigns", description: "Campaign hub for public education around readiness, humane training, responsible guard dogs, local dogs, and children safety.", href: "/campaigns", keywords: ["dog ownership campaign", "public education", "campaign"] },
   { title: "Dog Bond Directory", type: "Page", category: "Directory", description: "Future directory placeholder for responsible trainers, vets, shelters, breeders, estate partners, and education partners.", href: "/directory", keywords: ["dog directory", "trainer directory", "vet directory", "breeder directory"] },
 
-  { title: "The Dog Bond Manifesto", type: "Launch", category: "Manifesto", description: "The public launch doctrine behind The Dog Bond: responsibility before breed power, humane training, African reality, and public safety.", href: "/manifesto", keywords: ["manifesto", "launch", "responsibility before breed power", "doctrine"] },
-  { title: "Press & Media", type: "Launch", category: "Media", description: "Public-facing media information for journalists, bloggers, partners, schools, trainers, institutions, and community educators.", href: "/press", keywords: ["press", "media", "journalists", "story angles"] },
-  { title: "Public Launch Checklist", type: "Launch", category: "Launch", description: "A static launch readiness checklist covering platform, trust, SEO, distribution, and domain readiness.", href: "/launch-checklist", keywords: ["launch", "checklist", "public launch", "readiness"] },
-  { title: "First 30 Days Launch Plan", type: "Launch", category: "Launch Plan", description: "A static first 30-day content and distribution plan for launching The Dog Bond slowly and responsibly.", href: "/launch-plan", keywords: ["30 day plan", "launch plan", "public launch", "distribution"] },
-  { title: "Domain Migration Guide", type: "Launch", category: "Domain", description: "A static guide for moving from the Vercel subdomain to a custom domain later.", href: "/domain-guide", keywords: ["domain", "custom domain", "migration", "canonical", "Vercel"] },
-  { title: "Platform Status", type: "Launch", category: "Status", description: "A static transparency page showing what exists, what is coming later, and what is not active yet.", href: "/status", keywords: ["status", "platform status", "coming later", "not active"] }
+  { title: "The Dog Bond Manifesto", type: "Page", category: "Manifesto", description: "The public doctrine behind The Dog Bond: responsibility before breed power, humane training, African reality, and public safety.", href: "/manifesto", keywords: ["manifesto", "responsibility before breed power", "doctrine"] },
+  { title: "Press & Media", type: "Page", category: "Media", description: "Public-facing media information for journalists, bloggers, partners, schools, trainers, institutions, and community educators.", href: "/press", keywords: ["press", "media", "journalists", "story angles"] }
 ];
 
 export const searchIndex: SearchItem[] = [
@@ -145,13 +141,7 @@ export const popularSearches = [
   "dog ownership campaign",
   "dog directory",
   "readiness before ownership",
-  "launch",
   "manifesto",
   "press",
-  "media",
-  "domain",
-  "status",
-  "30 day plan",
-  "public launch",
-  "platform status"
+  "media"
 ];

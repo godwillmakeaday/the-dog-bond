@@ -6,7 +6,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Dog Readiness Brief | The Dog Bond",
+  title: "Dog Readiness Brief",
   description: "A future downloadable checklist for choosing, preparing for, and responsibly managing a dog in your household."
 };
 

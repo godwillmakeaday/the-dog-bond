@@ -5,7 +5,7 @@ import { PageHero } from "@/components/PageHero";
 import { StaticContactCTA } from "@/components/StaticContactCTA";
 
 export const metadata: Metadata = {
-  title: "Get Dog Bond Updates | The Dog Bond",
+  title: "Get Dog Bond Updates",
   description: "A static updates page for future Dog Bond guides, breed pages, Nigerian dog ownership notes, public safety education, and partner announcements."
 };
 

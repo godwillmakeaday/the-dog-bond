@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { breedDossiers } from "@/lib/data";
+import { SelectField } from "@/components/tools/SelectField";
 
 const names = breedDossiers.map((breed) => breed.name);
 
@@ -13,16 +14,6 @@ export function BreedComparisonTool() {
   const selected = useMemo(() => [a, b, c].filter(Boolean).map((name) => breedDossiers.find((breed) => breed.name === name)).filter(Boolean), [a, b, c]);
   const easiest = selected.find((breed) => breed?.firstTimeOwner.toLowerCase().includes("good") || breed?.firstTimeOwner.toLowerCase().includes("possible"));
   const caution = selected.find((breed) => breed?.trainingDifficulty.toLowerCase().includes("expert") || breed?.trainingDifficulty.toLowerCase().includes("advanced"));
-
-  const Selector = ({ label, value, setValue, optional = false }: { label: string; value: string; setValue: (value: string) => void; optional?: boolean }) => (
-    <label className="block rounded-2xl border border-earth-200 bg-white p-5">
-      <span className="text-sm font-bold uppercase tracking-[0.18em] text-earth-500">{label}</span>
-      <select value={value} onChange={(event) => setValue(event.target.value)} className="mt-3 w-full rounded-xl border border-earth-200 bg-earth-50 px-4 py-3 text-earth-900">
-        {optional ? <option value="">No third breed</option> : null}
-        {names.map((name) => <option key={name} value={name}>{name}</option>)}
-      </select>
-    </label>
-  );
 
   const rows = [
     ["Temperament", "temperament"],
@@ -40,9 +31,9 @@ export function BreedComparisonTool() {
     <section className="bg-earth-50 px-5 py-16 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-4 md:grid-cols-3">
-          <Selector label="Breed A" value={a} setValue={setA} />
-          <Selector label="Breed B" value={b} setValue={setB} />
-          <Selector label="Optional Breed C" value={c} setValue={setC} optional />
+          <SelectField label="Breed A" value={a} setValue={setA} options={names} />
+          <SelectField label="Breed B" value={b} setValue={setB} options={names} />
+          <SelectField label="Optional Breed C" value={c} setValue={setC} options={names} optionalLabel="No third breed" />
         </div>
 
         <div className="mt-8 overflow-hidden rounded-[2rem] border border-earth-200 bg-white shadow-card">

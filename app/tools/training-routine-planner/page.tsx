@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Training Routine Planner | The Dog Bond",
+  title: "Training Routine Planner",
   description: "A humane weekly dog training routine planner for obedience, leash control, feeding discipline, socialization, and calm visitor response."
 };
 

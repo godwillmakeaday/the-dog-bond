@@ -5,7 +5,7 @@ import { PageHero } from "@/components/PageHero";
 import { LaunchCTA } from "@/components/LaunchCTA";
 
 export const metadata: Metadata = {
-  title: "Press & Media | The Dog Bond",
+  title: "Press & Media",
   description: "Public-facing media information for journalists, bloggers, partners, podcast hosts, schools, trainers, institutions, and community educators."
 };
 

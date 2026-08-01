@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { RelatedLinks } from "@/components/RelatedLinks";
 
 export const metadata: Metadata = {
-  title: "Dogs in Estates and Shared Spaces | The Dog Bond",
+  title: "Dogs in Estates and Shared Spaces",
   description: "A deep page on dogs in estates, apartments, and shared environments: leash control, noise, roaming, neighbours, children, waste, shared roads, and responsible ownership."
 };
 
@@ -34,9 +35,9 @@ export default function AfricanRealityPage() {
         <div className="mx-auto max-w-7xl">
           <h2 className="font-display text-4xl font-semibold text-earth-950">Continue this pathway</h2>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
-            <a href="/guides/dog-in-estate" className="rounded-2xl bg-white p-5 text-sm font-bold leading-6 text-earth-800 shadow-card transition hover:-translate-y-1">Dog in an Estate →</a>
-<a href="/guides/dogs-and-neighbours" className="rounded-2xl bg-white p-5 text-sm font-bold leading-6 text-earth-800 shadow-card transition hover:-translate-y-1">Dogs and Neighbours →</a>
-<a href="/tools/readiness-checklist" className="rounded-2xl bg-white p-5 text-sm font-bold leading-6 text-earth-800 shadow-card transition hover:-translate-y-1">Readiness Checklist →</a>
+            <Link href="/guides/dog-in-estate" className="rounded-2xl bg-white p-5 text-sm font-bold leading-6 text-earth-800 shadow-card transition hover:-translate-y-1">Dog in an Estate →</Link>
+<Link href="/guides/dogs-and-neighbours" className="rounded-2xl bg-white p-5 text-sm font-bold leading-6 text-earth-800 shadow-card transition hover:-translate-y-1">Dogs and Neighbours →</Link>
+<Link href="/tools/readiness-checklist" className="rounded-2xl bg-white p-5 text-sm font-bold leading-6 text-earth-800 shadow-card transition hover:-translate-y-1">Readiness Checklist →</Link>
           </div>
         </div>
       </section>

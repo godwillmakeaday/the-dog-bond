@@ -18,19 +18,20 @@ export function HomeConversionSection() {
         </p>
         <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {cards.map((card) => (
-            <a key={card.href} href={card.href} className="rounded-[2rem] border border-earth-200 bg-white p-7 shadow-card transition hover:-translate-y-1">
+            <Link key={card.href} href={card.href} className="rounded-[2rem] border border-earth-200 bg-white p-7 shadow-card transition hover:-translate-y-1">
               <h3 className="font-display text-3xl font-semibold text-earth-950">{card.title}</h3>
               <p className="mt-4 leading-7 text-earth-700">{card.text}</p>
               <span className="mt-5 inline-block text-xs font-bold uppercase tracking-[0.2em] text-earth-700">Open →</span>
-            </a>
+            </Link>
           ))}
         </div>
         <div className="mt-10 flex flex-wrap gap-3">
           <a href="/use-the-dog-bond" className="rounded-full bg-earth-900 px-6 py-4 text-xs font-bold uppercase tracking-[0.16em] text-earth-50">Use The Dog Bond</a>
           <a href="/search" className="rounded-full border border-earth-300 bg-white px-6 py-4 text-xs font-bold uppercase tracking-[0.16em] text-earth-800">Search the Library</a>
-          <a href="/partners" className="rounded-full border border-earth-300 bg-white px-6 py-4 text-xs font-bold uppercase tracking-[0.16em] text-earth-800">Partner With Us</a>
+          <Link href="/partners" className="rounded-full border border-earth-300 bg-white px-6 py-4 text-xs font-bold uppercase tracking-[0.16em] text-earth-800">Partner With Us</Link>
         </div>
       </div>
     </section>
   );
 }
+import Link from "next/link";

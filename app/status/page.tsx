@@ -3,11 +3,14 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { LaunchCTA } from "@/components/LaunchCTA";
+import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: "Platform Status | The Dog Bond",
-  description: "A static transparency page showing what is live, what is coming later, and what is not active yet on The Dog Bond."
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "Platform Status",
+  description: "A static transparency page showing what is live, what is coming later, and what is not active yet on The Dog Bond.",
+  pathname: "/status",
+  noIndex: true,
+});
 
 const groups = [
   {

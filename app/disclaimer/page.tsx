@@ -1,0 +1,8 @@
+import type { Metadata } from "next";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import { PageHero } from "@/components/PageHero";
+
+export const metadata: Metadata = { title: "Educational Disclaimer", description: "The Dog Bond disclaimer on educational content, veterinary care, training, legal guidance, and user responsibility." };
+const sections = ["General educational content", "Not veterinary advice", "Not professional training replacement", "Not legal advice", "Dangerous dog behaviour", "Emergency situations", "User responsibility", "External links and future partners"];
+export default function DisclaimerPage() { return <main><Header /><PageHero eyebrow="Educational limits" title="Educational Disclaimer" text="The Dog Bond helps with dog ownership decisions, but it does not replace qualified professional help." /><section className="bg-earth-50 px-5 py-16 lg:px-8"><div className="mx-auto max-w-5xl rounded-[2.5rem] border border-earth-200 bg-white p-8 shadow-card md:p-10"><p className="text-xl leading-9 text-earth-800">If a dog shows signs of illness, severe fear, repeated aggression, biting behaviour, injury, poisoning, heat distress, or dangerous behaviour, consult a qualified veterinarian, professional trainer, behaviour specialist, or appropriate local authority.</p><div className="mt-8 grid gap-4 md:grid-cols-2">{sections.map((item) => <div key={item} className="rounded-2xl bg-earth-50 p-5"><h2 className="font-display text-2xl font-semibold text-earth-950">{item}</h2><p className="mt-2 text-sm leading-7 text-earth-700">Use this platform as education and preparation, not as a substitute for case-specific professional judgment.</p></div>)}</div></div></section><Footer /></main>; }

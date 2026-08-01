@@ -1,0 +1,8 @@
+import type { Metadata } from "next";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import { PageHero } from "@/components/PageHero";
+
+export const metadata: Metadata = { title: "Contact The Dog Bond", description: "Contact The Dog Bond for inquiries, feedback, corrections, and future partnership interest." };
+const reasons = ["General inquiries", "Partnership inquiries", "Corrections and feedback", "Trainer/vet/breeder interest", "Community and education interest"];
+export default function ContactPage() { return <main><Header /><PageHero eyebrow="Contact" title="Contact The Dog Bond" text="Use this page for feedback, corrections, partnerships, and future education or community inquiries." /><section className="bg-white px-5 py-16 lg:px-8"><div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.7fr_0.3fr]"><div className="grid gap-4 md:grid-cols-2">{reasons.map((item) => <div key={item} className="rounded-[2rem] border border-earth-200 bg-earth-50 p-6 shadow-card"><h2 className="font-display text-2xl font-semibold text-earth-950">{item}</h2><p className="mt-3 text-sm leading-7 text-earth-700">Dedicated intake forms are coming soon.</p></div>)}</div><div className="rounded-[2rem] bg-earth-950 p-8 text-earth-50 shadow-card"><h2 className="font-display text-3xl font-semibold">Email placeholder</h2><p className="mt-4 leading-7 text-earth-100">For now, use the placeholder email link below.</p><a href="mailto:hello@thedogbond.com" className="mt-6 inline-block rounded-full bg-earth-50 px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-earth-950">hello@thedogbond.com</a></div></div></section><Footer /></main>; }

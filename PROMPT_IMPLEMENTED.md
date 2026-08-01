@@ -1,20 +1,58 @@
-# Prompt Implemented
+# Prompt Implemented — The Dog Bond v1.0
 
-Create a premium authority website for **The Dog Bond** with the tagline **Understanding man’s most social friend**.
+Implemented: **The Dog Bond v1.0 — Launch-Ready Institutional Platform**
 
-The site should not be a generic pet blog. It should frame dogs as social companions, protectors, learners, emotional witnesses, household members, and loyal partners in human life.
+## New routes
 
-The central concept is that the dog is closest to man not by physical similarity, but through social relationship: home, emotion, training, protection, routine, trust, and loyalty.
+- `/manifesto`
+- `/press`
+- `/launch-checklist`
+- `/launch-plan`
+- `/domain-guide`
+- `/status`
 
-Implemented sections:
-- Hero
-- Why Dogs Matter
-- Core Pillars
-- Human–Dog Bond philosophy
-- Breed Intelligence
-- Training Desk
-- Protection & Responsibility
-- African Dog Life
-- Knowledge Library
-- About
-- Footer disclaimer
+## New components
+
+- `LaunchCTA`
+- `HomeLaunchSections`
+
+## Updated
+
+- Homepage hero and homepage launch sections
+- Header navigation
+- Footer navigation
+- `lib/search.ts`
+- `components/SearchFinder.tsx`
+- `app/sitemap.ts`
+- README
+- PROMPT_IMPLEMENTED
+
+## Launch readiness improvements
+
+- Clearer homepage institutional positioning
+- The Dog Bond Standard: responsibility before breed power
+- Launch-ready pathways
+- Public manifesto
+- Press/media page
+- Static launch checklist
+- First 30-day launch plan
+- Domain migration guide
+- Platform status transparency page
+
+## Safety/trust posture
+
+No backend, database, login, payments, analytics scripts, fake partner listings, fake testimonials, fake media claims, fake awards, fake vet-review claims, or dangerous dog-handling instructions were added.
+
+## Testing
+
+Run:
+
+```bash
+npx tsc --noEmit
+```
+
+Deploy through Vercel:
+
+```bash
+vercel --prod
+```

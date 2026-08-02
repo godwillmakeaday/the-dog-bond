@@ -9,7 +9,7 @@ const cards = [
 
 export function HomeConversionSection() {
   return (
-    <section className="bg-earth-50 px-5 py-16 lg:px-8">
+    <section className="bg-earth-50 px-5 py-14 sm:py-16 lg:px-8 lg:py-20">
       <div className="mx-auto max-w-7xl">
         <p className="text-sm font-bold uppercase tracking-[0.28em] text-earth-500">Conversion pathway</p>
         <h2 className="mt-4 max-w-4xl font-display text-4xl font-semibold leading-tight text-earth-950 md:text-6xl">How to Use The Dog Bond</h2>

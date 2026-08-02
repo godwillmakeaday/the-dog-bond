@@ -20,7 +20,56 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
   const [query, setQuery] = useState(initialQuery);
   const [type, setType] = useState<TypeFilter>("All");
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [recentSearches, setRecentSearches] = useState<string[]>(() => {
+    if (typeof window === "undefined") return [];
+
+    try {
+      const stored = window.localStorage.getItem("dogbond-recent-searches");
+      const parsed: unknown = stored ? JSON.parse(stored) : [];
+
+      if (!Array.isArray(parsed)) return [];
+
+      return parsed
+        .filter((item): item is string => typeof item === "string")
+        .slice(0, 6);
+    } catch {
+      return [];
+    }
+  });
   const resultRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+
+  const saveRecentSearch = (term: string) => {
+    const trimmedTerm = term.trim();
+
+    if (trimmedTerm.length < 2) return;
+
+    setRecentSearches((current) => {
+      const next = [
+        trimmedTerm,
+        ...current.filter(
+          (item) => item.toLowerCase() !== trimmedTerm.toLowerCase(),
+        ),
+      ].slice(0, 6);
+
+      window.localStorage.setItem(
+        "dogbond-recent-searches",
+        JSON.stringify(next),
+      );
+
+      return next;
+    });
+  };
+
+  const selectSearch = (term: string) => {
+    setQuery(term);
+    setActiveIndex(-1);
+    saveRecentSearch(term);
+  };
+
+  const clearRecentSearches = () => {
+    setRecentSearches([]);
+    window.localStorage.removeItem("dogbond-recent-searches");
+  };
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -136,7 +185,14 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
 
     if (event.key === "Enter" && activeIndex >= 0) {
       event.preventDefault();
+      saveRecentSearch(query);
       resultRefs.current[activeIndex]?.click();
+      return;
+    }
+
+    if (event.key === "Enter" && query.trim()) {
+      event.preventDefault();
+      saveRecentSearch(query);
       return;
     }
 
@@ -304,7 +360,7 @@ placeholder="Try: guard dog, first-time owner, local African dog, heat water sha
             <p className="text-sm font-bold uppercase tracking-[0.2em] text-earth-500">Popular searches</p>
             <div className="mt-3 flex flex-wrap gap-2">
               {popularSearches.map((item) => (
-                <button key={item} type="button" onClick={() => setQuery(item)} className="rounded-full bg-forest-100 px-4 py-2 text-sm font-semibold text-forest-900 transition hover:bg-forest-200">
+                <button key={item} type="button" onClick={() => selectSearch(item)} className="rounded-full bg-forest-100 px-4 py-2 text-sm font-semibold text-forest-900 transition hover:bg-forest-200">
                   {item}
                 </button>
               ))}
@@ -312,7 +368,38 @@ placeholder="Try: guard dog, first-time owner, local African dog, heat water sha
           </div>
         </div>
 
-        <div
+        {recentSearches.length > 0 ? (
+        <div className="mt-6 border-t border-earth-200 pt-5">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-earth-500">
+              Recent searches
+            </p>
+
+            <button
+              type="button"
+              onClick={clearRecentSearches}
+              className="text-xs font-bold uppercase tracking-[0.16em] text-earth-600 transition hover:text-earth-950"
+            >
+              Clear history
+            </button>
+          </div>
+
+          <div className="mt-3 flex flex-wrap gap-2">
+            {recentSearches.map((term) => (
+              <button
+                key={term}
+                type="button"
+                onClick={() => selectSearch(term)}
+                className="rounded-full border border-earth-200 bg-white px-4 py-2 text-sm font-semibold text-earth-700 transition hover:border-earth-900 hover:text-earth-950"
+              >
+                {term}
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
+      <div
         id="dogbond-search-results"
         className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3"
       >
@@ -380,10 +467,7 @@ placeholder="Try: guard dog, first-time owner, local African dog, heat water sha
               <button
                 key={term}
                 type="button"
-                onClick={() => {
-                  setQuery(term);
-                  setActiveIndex(-1);
-                }}
+                onClick={() => selectSearch(term)}
                 className="rounded-full bg-forest-100 px-4 py-2 text-sm font-semibold text-forest-900 transition hover:bg-forest-200"
               >
                 {term}

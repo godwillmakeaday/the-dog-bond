@@ -992,6 +992,52 @@ export const decisionGuides = [
     },
     relatedGuides: ["dog-cost-reality", "dog-neglect-warning-signs", "should-i-get-a-dog", "best-dog-for-compound"],
     relatedSiteLinks: ["/suitability-engine", "/breed-dossiers", "/ownership-standard", "/african-dog-life"],
+    evidence: {
+      evidenceLevel: "strong",
+      editorialNote:
+        "This guide combines veterinary hot-weather guidance with peer-reviewed research on canine heat-related illness. The sources support prevention through water, shade, ventilation, reduced exertion, close observation, and prompt veterinary attention when overheating is suspected.",
+      sources: [
+        {
+          id: "bva-met-office-hot-weather-pets",
+          title: "Looking after your pets during hot weather",
+          organisation: "British Veterinary Association and Met Office",
+          year: 2026,
+          url: "https://weather.metoffice.gov.uk/warnings-and-advice/seasonal-advice/health-wellbeing/looking-after-pets-during-hot-weather",
+          kind: "veterinary-guidance",
+          strength: "strong",
+          jurisdiction: "United Kingdom",
+          note:
+            "Advises continuous access to fresh water, adequate ventilation, shade from direct sunlight, cooler exercise times, and prompt veterinary contact when heat-related illness is suspected.",
+        },
+        {
+          id: "hall-carter-oneill-2020-exertional-hri",
+          title:
+            "Dogs Don't Die Just in Hot Cars—Exertional Heat-Related Illness Is a Greater Threat to UK Dogs",
+          author: "Emily J. Hall, Anne J. Carter, and Dan G. O'Neill",
+          year: 2020,
+          url: "https://pubmed.ncbi.nlm.nih.gov/32751913/",
+          kind: "peer-reviewed-study",
+          strength: "foundational",
+          jurisdiction: "United Kingdom",
+          note:
+            "VetCompass research found exertion was the predominant trigger among recorded canine heat-related illness events, supporting limits on work and exercise during heat.",
+        },
+        {
+          id: "hall-et-al-2022-severe-fatal-hri",
+          title:
+            "Risk Factors for Severe and Fatal Heat-Related Illness in UK Dogs—A VetCompass Study",
+          author:
+            "Emily J. Hall, Anne J. Carter, Guaduneth Chico, Jude Bradbury, Louise K. Gentle, Dominic Barfield, and Dan G. O'Neill",
+          year: 2022,
+          url: "https://pubmed.ncbi.nlm.nih.gov/35622759/",
+          kind: "peer-reviewed-study",
+          strength: "strong",
+          jurisdiction: "United Kingdom",
+          note:
+            "Identifies factors associated with severe disease and fatal outcomes, including situations where dogs cannot escape the heat and reduced ability to regulate body temperature.",
+        },
+      ],
+    },
     disclaimer: "This guide is educational. It does not replace veterinary care, professional dog training, behavioural assessment, or local legal guidance. If a dog shows signs of illness, severe fear, repeated aggression, or dangerous behaviour, consult a qualified professional."
   },
   {
@@ -1516,4 +1562,4 @@ export const decisionGuides = [
   },
 ] as const;
 
-export type DecisionGuide = (typeof decisionGuides)[number];
+export type DecisionGuide = (typeof decisionGuides)[number] & { evidence?: ArticleEvidence };

@@ -36,7 +36,7 @@ export type ArticleEvidence = {
     | "moderate"
     | "developing"
     | "editorial";
-  sources: EvidenceSource[];
+  sources: readonly EvidenceSource[];
   editorialNote?: string;
 };
 

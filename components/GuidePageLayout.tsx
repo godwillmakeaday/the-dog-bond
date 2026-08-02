@@ -4,6 +4,7 @@ import { decisionGuides } from "@/lib/data";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { ReadinessBriefCTA } from "@/components/ReadinessBriefCTA";
 import { GuideToolPanel } from "@/components/GuideToolPanel";
+import { ArticleEvidence } from "@/components/ArticleEvidence";
 import { FAQBlock } from "@/components/FAQBlock";
 import { guideDepthFor } from "@/lib/guideDepth";
 import { topicPages } from "@/lib/topics";
@@ -77,6 +78,8 @@ export function GuidePageLayout({ guide }: { guide: DecisionGuide }) {
               <p className="text-sm font-bold uppercase tracking-[0.2em] text-earth-500">Educational disclaimer</p>
               <p className="mt-3 text-sm leading-7 text-earth-700">{guide.disclaimer}</p>
             </section>
+              <ArticleEvidence evidence={guide.evidence} />
+
           </article>
           <aside className="space-y-6">
             <GuideToolPanel category={guide.category} slug={guide.slug} />

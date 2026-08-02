@@ -99,7 +99,7 @@ export function ArticleEvidence({ evidence }: ArticleEvidenceProps) {
                 </span>
 
                 <div className="min-w-0 flex-1">
-                  <h3 className="text-base font-semibold leading-6 text-earth-950 sm:text-lg sm:leading-7">
+                  <h3 className="text-lg font-semibold leading-tight text-earth-950 sm:text-xl">
                     {source.url ? (
                       <a
                         href={source.url}
@@ -114,13 +114,13 @@ export function ArticleEvidence({ evidence }: ArticleEvidenceProps) {
                     )}
                   </h3>
 
-                  <p className="mt-2 text-sm leading-5 text-earth-700 sm:leading-6">
+                  <p className="mt-2 text-sm leading-6 text-earth-700">
                     {attribution}
                     {source.year ? ` · ${source.year}` : ""}
                     {source.jurisdiction ? ` · ${source.jurisdiction}` : ""}
                   </p>
 
-                  <div className="mt-3 flex flex-wrap gap-2">
+                  <div className="mt-4 flex flex-wrap gap-2">
                     <span className="rounded-full bg-earth-100 px-3 py-1 text-xs font-semibold text-earth-700">
                       {evidenceKindLabels[source.kind]}
                     </span>
@@ -131,7 +131,7 @@ export function ArticleEvidence({ evidence }: ArticleEvidenceProps) {
                   </div>
 
                   {source.note ? (
-                    <p className="mt-3 text-sm leading-6 text-earth-600">
+                    <p className="mt-5 text-sm leading-6 text-earth-600">
                       {source.note}
                     </p>
                   ) : null}

@@ -16,6 +16,66 @@ const types = ["All", "Guide", "Tool", "Article", "Topic", "Glossary", "Mistake"
 
 type TypeFilter = (typeof types)[number];
 
+type SearchAnalyticsEntry = {
+  query: string;
+  type: TypeFilter;
+  resultCount: number;
+  zeroResults: boolean;
+  createdAt: string;
+};
+
+const searchAnalyticsStorageKey = "dogbond-search-analytics";
+
+const recordSearchAnalytics = (
+  query: string,
+  type: TypeFilter,
+  resultCount: number,
+) => {
+  const trimmedQuery = query.trim();
+
+  if (trimmedQuery.length < 2) return;
+
+  try {
+    const stored = window.localStorage.getItem(
+      searchAnalyticsStorageKey,
+    );
+    const parsed = stored ? JSON.parse(stored) : [];
+    const currentEntries: SearchAnalyticsEntry[] =
+      Array.isArray(parsed) ? parsed : [];
+
+    const mostRecent = currentEntries[0];
+    const now = Date.now();
+
+    if (
+      mostRecent &&
+      mostRecent.query.toLowerCase() ===
+        trimmedQuery.toLowerCase() &&
+      mostRecent.type === type &&
+      mostRecent.resultCount === resultCount &&
+      now - new Date(mostRecent.createdAt).getTime() < 5000
+    ) {
+      return;
+    }
+
+    const entry: SearchAnalyticsEntry = {
+      query: trimmedQuery,
+      type,
+      resultCount,
+      zeroResults: resultCount === 0,
+      createdAt: new Date(now).toISOString(),
+    };
+
+    const nextEntries = [entry, ...currentEntries].slice(0, 100);
+
+    window.localStorage.setItem(
+      searchAnalyticsStorageKey,
+      JSON.stringify(nextEntries),
+    );
+  } catch {
+    return;
+  }
+};
+
 const editDistance = (left: string, right: string) => {
   const rows = left.length + 1;
   const columns = right.length + 1;
@@ -347,6 +407,7 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
     if (event.key === "Enter" && activeIndex >= 0) {
       event.preventDefault();
       saveRecentSearch(query);
+      recordSearchAnalytics(query, type, results.length);
       resultRefs.current[activeIndex]?.click();
       return;
     }
@@ -354,6 +415,7 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
     if (event.key === "Enter" && query.trim()) {
       event.preventDefault();
       saveRecentSearch(query);
+      recordSearchAnalytics(query, type, results.length);
       return;
     }
 

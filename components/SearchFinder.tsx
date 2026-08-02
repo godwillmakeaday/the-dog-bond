@@ -20,6 +20,7 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
   const [query, setQuery] = useState(initialQuery);
   const [type, setType] = useState<TypeFilter>("All");
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [isAutocompleteOpen, setIsAutocompleteOpen] = useState(false);
   const [recentSearches, setRecentSearches] = useState<string[]>(() => {
     if (typeof window === "undefined") return [];
 
@@ -63,6 +64,7 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
   const selectSearch = (term: string) => {
     setQuery(term);
     setActiveIndex(-1);
+    setIsAutocompleteOpen(false);
     saveRecentSearch(term);
   };
 
@@ -98,6 +100,49 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
       window.removeEventListener("popstate", restoreQueryFromUrl);
     };
   }, []);
+
+  const autocompleteSuggestions = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+
+    if (normalizedQuery.length < 2) return [];
+
+    const candidates = [
+      ...popularSearches,
+      ...searchIndex.flatMap((item) => [
+        item.title,
+        item.category,
+        ...item.keywords,
+      ]),
+    ];
+
+    const uniqueCandidates = Array.from(
+      new Map(
+        candidates
+          .map((candidate) => candidate.trim())
+          .filter(Boolean)
+          .map((candidate) => [candidate.toLowerCase(), candidate]),
+      ).values(),
+    );
+
+    return uniqueCandidates
+      .filter((candidate) => {
+        const normalizedCandidate = candidate.toLowerCase();
+
+        return (
+          normalizedCandidate !== normalizedQuery &&
+          normalizedCandidate.includes(normalizedQuery)
+        );
+      })
+      .sort((a, b) => {
+        const aStarts = a.toLowerCase().startsWith(normalizedQuery);
+        const bStarts = b.toLowerCase().startsWith(normalizedQuery);
+
+        if (aStarts !== bStarts) return aStarts ? -1 : 1;
+
+        return a.length - b.length || a.localeCompare(b);
+      })
+      .slice(0, 6);
+  }, [query]);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -321,20 +366,58 @@ const resultSummary = (() => {
         <div className="rounded-[2.5rem] border border-earth-200 bg-white p-6 shadow-card md:p-8">
           <label htmlFor="dogbond-search" className="text-sm font-bold uppercase tracking-[0.24em] text-earth-500">Search guides, tools, articles, and pages</label>
           <input
-            id="dogbond-search"
-            value={query}
-            onChange={(event) => {
-            setQuery(event.target.value);
-            setActiveIndex(-1);
-          }}
-          onKeyDown={handleSearchKeyDown}
-          aria-controls="dogbond-search-results"
-          aria-activedescendant={
-            activeIndex >= 0 ? `dogbond-result-${activeIndex}` : undefined
-          }
-placeholder="Try: guard dog, first-time owner, local African dog, heat water shade"
-            className="mt-4 w-full rounded-2xl border border-earth-200 bg-earth-50 px-5 py-4 text-lg outline-none transition focus:border-earth-900"
-          />
+              id="dogbond-search"
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setActiveIndex(-1);
+                setIsAutocompleteOpen(true);
+              }}
+              onFocus={() => setIsAutocompleteOpen(true)}
+              onBlur={() => {
+                window.setTimeout(() => setIsAutocompleteOpen(false), 120);
+              }}
+              onKeyDown={handleSearchKeyDown}
+              aria-controls="dogbond-search-results"
+              aria-activedescendant={
+                activeIndex >= 0
+                  ? `dogbond-result-${activeIndex}`
+                  : undefined
+              }
+              aria-autocomplete="list"
+              placeholder="Try: guard dog, first-time owner, local African dog, heat water shade"
+              className="mt-4 w-full rounded-2xl border border-earth-200 bg-earth-50 px-5 py-4 text-lg outline-none transition focus:border-earth-900"
+            />
+
+            {isAutocompleteOpen && autocompleteSuggestions.length > 0 ? (
+              <div
+                id="dogbond-autocomplete"
+                role="listbox"
+                className="mt-2 overflow-hidden rounded-2xl border border-earth-200 bg-white shadow-card"
+              >
+                {autocompleteSuggestions.map((suggestion) => (
+                  <button
+                    key={suggestion}
+                    type="button"
+                    role="option"
+                    aria-selected="false"
+                    onMouseDown={(event) => {
+                      event.preventDefault();
+                      selectSearch(suggestion);
+                    }}
+                    className="flex w-full items-center justify-between gap-4 border-b border-earth-100 px-5 py-3 text-left text-sm font-semibold text-earth-800 transition last:border-b-0 hover:bg-earth-50 hover:text-earth-950"
+                  >
+                    <span>{highlightMatch(suggestion)}</span>
+                    <span
+                      aria-hidden="true"
+                      className="text-xs text-earth-400"
+                    >
+                      Search
+                    </span>
+                  </button>
+                ))}
+              </div>
+            ) : null}
 {query && (
   <div className="mt-3 flex justify-end">
     <button

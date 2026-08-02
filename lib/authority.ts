@@ -40,7 +40,7 @@ export const paulMagaji: AuthorityProfile = {
   ],
   bio:
     "Paul Ajeh Magaji is a Nigerian barrister and institutional publisher. At The Dog Bond, his work concerns responsible ownership, household decision-making, public safety, contracts, evidence, institutional policy, and the legal consequences of living with dogs. He does not present himself as a veterinarian.",
-  profilePath: "/about",
+  profilePath: "/about/paul-magaji",
 };
 
 export const editorialStandards = {

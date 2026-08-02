@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { ArticleAuthority } from "@/components/ArticleAuthority";
+import { ArticleJsonLd } from "@/components/ArticleJsonLd";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { ReadinessBriefCTA } from "@/components/ReadinessBriefCTA";
@@ -41,6 +43,13 @@ export default async function ArticleBriefPage(props: { params: Promise<{ slug: 
   return (
     <main>
       <Header />
+      <ArticleJsonLd
+        title={article.title}
+        description={article.excerpt}
+        pathname={`/articles/${article.slug}`}
+        publishedAt={article.publishedAt}
+        updatedAt={article.updatedAt}
+      />
       <article>
         <section className="bg-earth-900 px-5 py-20 text-earth-50 lg:px-8">
           <div className="mx-auto max-w-4xl">
@@ -50,6 +59,10 @@ export default async function ArticleBriefPage(props: { params: Promise<{ slug: 
             </div>
             <h1 className="mt-8 font-display text-5xl font-semibold leading-[0.98] tracking-[-0.04em] md:text-7xl">{article.title}</h1>
             <p className="mt-7 text-xl leading-9 text-earth-100">{article.intro}</p>
+            <ArticleAuthority
+              publishedAt={article.publishedAt}
+              updatedAt={article.updatedAt}
+            />
           </div>
         </section>
 

@@ -147,6 +147,28 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
   };
 
 
+  const highlightMatch = (text: string) => {
+    const trimmedQuery = query.trim();
+
+    if (!trimmedQuery) return text;
+
+    const escapedQuery = trimmedQuery.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const parts = text.split(new RegExp(`(${escapedQuery})`, "gi"));
+
+    return parts.map((part, index) =>
+      part.toLowerCase() === trimmedQuery.toLowerCase() ? (
+        <mark
+          key={`${part}-${index}`}
+          className="rounded bg-forest-100 px-1 text-inherit"
+        >
+          {part}
+        </mark>
+      ) : (
+        part
+      ),
+    );
+  };
+
   const getMatchContext = (item: SearchItem) => {
     const q = query.trim().toLowerCase();
 
@@ -273,11 +295,11 @@ placeholder="Try: guard dog, first-time owner, local African dog, heat water sha
               </div>
 
               <h2 className="mt-5 font-display text-2xl font-semibold leading-tight text-earth-950">
-                {item.title}
+                {highlightMatch(item.title)}
               </h2>
 
               <p className="mt-3 text-base leading-7 text-earth-700">
-                {item.description}
+                {highlightMatch(item.description)}
               </p>
 
               {query.trim() ? (

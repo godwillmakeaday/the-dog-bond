@@ -216,6 +216,49 @@ const resultSummary = (() => {
     return "Related to your search";
   };
 
+  const getSearchSuggestions = () => {
+    const normalizedQuery = query.trim().toLowerCase();
+
+    const contextualSuggestions =
+      normalizedQuery.includes("vaccin") ||
+      normalizedQuery.includes("health") ||
+      normalizedQuery.includes("vet")
+        ? ["Dog Health", "Puppy Care", "Vet Partner", "Dog Around Children"]
+        : normalizedQuery.includes("train") ||
+            normalizedQuery.includes("aggress") ||
+            normalizedQuery.includes("behaviour")
+          ? [
+              "Training",
+              "Training Without Cruelty",
+              "Guard Dog",
+              "Dog Socialization",
+            ]
+          : normalizedQuery.includes("breed") ||
+              normalizedQuery.includes("pitbull") ||
+              normalizedQuery.includes("mastiff")
+            ? ["Rottweiler", "Boerboel", "German Shepherd", "Local African Dog"]
+            : normalizedQuery.includes("cost") ||
+                normalizedQuery.includes("buy") ||
+                normalizedQuery.includes("owner")
+              ? [
+                  "First-time Dog Owner",
+                  "Dog Cost",
+                  "Readiness Before Ownership",
+                  "Breed Comparison",
+                ]
+              : [];
+
+    return Array.from(
+      new Set([...contextualSuggestions, ...popularSearches]),
+    )
+      .filter(
+        (suggestion) =>
+          suggestion.toLowerCase() !== normalizedQuery &&
+          !suggestion.toLowerCase().includes(normalizedQuery),
+      )
+      .slice(0, 6);
+  };
+
   return (
     <section className="bg-earth-50 px-5 py-16 lg:px-8">
       <div className="mx-auto max-w-7xl">
@@ -317,36 +360,38 @@ placeholder="Try: guard dog, first-time owner, local African dog, heat water sha
         </div>
 
         {results.length === 0 ? (
-  <div className="mt-8 rounded-[2rem] border border-earth-200 bg-white p-8 text-center shadow-card">
-    <h2 className="font-display text-3xl font-semibold text-earth-950">
-      No exact match yet.
-    </h2>
+        <div className="mt-8 rounded-[2rem] border border-earth-200 bg-white p-8 text-center shadow-card">
+          <h2 className="font-display text-3xl font-semibold text-earth-950">
+            {query.trim()
+              ? `No exact match for “${query.trim()}”.`
+              : "No exact match yet."}
+          </h2>
 
-    <p className="mt-3 text-earth-700">
-      Try another search or explore one of these popular topics.
-    </p>
+          <p className="mt-3 text-earth-700">
+            Try another phrase or continue with one of these related searches.
+          </p>
 
-    <div className="mt-6 flex flex-wrap justify-center gap-3">
-      {[
-        "Rottweiler",
-        "Boerboel",
-        "German Shepherd",
-        "Guard Dog",
-        "Children",
-        "Training",
-      ].map((term) => (
-        <button
-          key={term}
-          type="button"
-          onClick={() => setQuery(term)}
-          className="rounded-full bg-forest-100 px-4 py-2 text-sm font-semibold text-forest-900 hover:bg-forest-200"
-        >
-          {term}
-        </button>
-      ))}
-    </div>
-  </div>
-) : null}
+          <p className="mt-6 text-xs font-bold uppercase tracking-[0.18em] text-earth-500">
+            Suggested searches
+          </p>
+
+          <div className="mt-4 flex flex-wrap justify-center gap-3">
+            {getSearchSuggestions().map((term) => (
+              <button
+                key={term}
+                type="button"
+                onClick={() => {
+                  setQuery(term);
+                  setActiveIndex(-1);
+                }}
+                className="rounded-full bg-forest-100 px-4 py-2 text-sm font-semibold text-forest-900 transition hover:bg-forest-200"
+              >
+                {term}
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : null}
       </div>
     </section>
   );

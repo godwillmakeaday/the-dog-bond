@@ -121,12 +121,38 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
           ))}
         </div>
 
-        {results.length === 0 ? (
-          <div className="mt-8 rounded-[2rem] border border-earth-200 bg-white p-8 text-center shadow-card">
-            <h2 className="font-display text-3xl font-semibold text-earth-950">No exact match yet.</h2>
-            <p className="mt-3 text-earth-700">Try a broader term like breed, guard dog, children, training, cost, local dog, or heat.</p>
-          </div>
-        ) : null}
+
+{results.length === 0 ? (
+  <div className="mt-8 rounded-[2rem] border border-earth-200 bg-white p-8 text-center shadow-card">
+    <h2 className="font-display text-3xl font-semibold text-earth-950">
+      No exact match yet.
+    </h2>
+
+    <p className="mt-3 text-earth-700">
+      Try another search or explore one of these popular topics.
+    </p>
+
+    <div className="mt-6 flex flex-wrap justify-center gap-3">
+      {[
+        "Rottweiler",
+        "Boerboel",
+        "German Shepherd",
+        "Guard Dog",
+        "Children",
+        "Training",
+      ].map((term) => (
+        <button
+          key={term}
+          type="button"
+          onClick={() => setQuery(term)}
+          className="rounded-full bg-forest-100 px-4 py-2 text-sm font-semibold text-forest-900 hover:bg-forest-200"
+        >
+          {term}
+        </button>
+      ))}
+    </div>
+  </div>
+) : null}
       </div>
     </section>
   );

@@ -45,9 +45,9 @@ export function ArticleEvidence({ evidence }: ArticleEvidenceProps) {
   return (
     <section
       aria-labelledby="article-evidence-heading"
-      className="mt-12 rounded-[2rem] border border-earth-200 bg-earth-50 p-6 md:p-8"
+      className="mt-10 rounded-[1.75rem] border border-earth-200 bg-earth-50 p-4 sm:p-6 md:p-8"
     >
-      <div className="flex flex-col gap-4 border-b border-earth-200 pb-6 sm:flex-row sm:items-start sm:justify-between">
+      <div className="flex flex-col gap-3 border-b border-earth-200 pb-5 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-earth-600">
             Evidence record
@@ -70,17 +70,17 @@ export function ArticleEvidence({ evidence }: ArticleEvidenceProps) {
       </div>
 
       {evidence.editorialNote ? (
-        <div className="mt-6 rounded-2xl border border-earth-200 bg-white p-5">
+        <div className="mt-5 rounded-2xl border border-earth-200 bg-white p-4 sm:p-5">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-earth-600">
             Editorial note
           </p>
-          <p className="mt-3 leading-7 text-earth-700">
+          <p className="mt-3 leading-6 text-earth-700 sm:leading-7">
             {evidence.editorialNote}
           </p>
         </div>
       ) : null}
 
-      <ol className="mt-6 space-y-4">
+      <ol className="mt-5 space-y-4">
         {evidence.sources.map((source, index) => {
           const attribution =
             source.author ?? source.organisation ?? "Source author not listed";
@@ -88,18 +88,18 @@ export function ArticleEvidence({ evidence }: ArticleEvidenceProps) {
           return (
             <li
               key={source.id}
-              className="rounded-2xl border border-earth-200 bg-white p-5"
+              className="rounded-2xl border border-earth-200 bg-white p-4 sm:p-5"
             >
-              <div className="flex gap-4">
+              <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
                 <span
                   aria-hidden="true"
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-earth-950 text-sm font-bold text-white"
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-earth-950 text-xs font-bold text-white"
                 >
                   {index + 1}
                 </span>
 
-                <div className="min-w-0">
-                  <h3 className="font-semibold leading-7 text-earth-950">
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-lg font-semibold leading-tight text-earth-950 sm:text-xl">
                     {source.url ? (
                       <a
                         href={source.url}
@@ -120,7 +120,7 @@ export function ArticleEvidence({ evidence }: ArticleEvidenceProps) {
                     {source.jurisdiction ? ` · ${source.jurisdiction}` : ""}
                   </p>
 
-                  <div className="mt-3 flex flex-wrap gap-2">
+                  <div className="mt-4 flex flex-wrap gap-2">
                     <span className="rounded-full bg-earth-100 px-3 py-1 text-xs font-semibold text-earth-700">
                       {evidenceKindLabels[source.kind]}
                     </span>
@@ -131,7 +131,7 @@ export function ArticleEvidence({ evidence }: ArticleEvidenceProps) {
                   </div>
 
                   {source.note ? (
-                    <p className="mt-4 text-sm leading-6 text-earth-600">
+                    <p className="mt-5 text-sm leading-6 text-earth-600">
                       {source.note}
                     </p>
                   ) : null}

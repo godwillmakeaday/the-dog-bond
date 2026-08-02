@@ -1,3 +1,5 @@
+import type { ArticleEvidence } from "@/lib/evidence";
+
 export type RelatedArticleLink = {
   title: string;
   href: string;
@@ -16,6 +18,7 @@ export type ArticleBrief = {
   disclaimer?: string;
   publishedAt?: string;
   updatedAt?: string;
+  evidence?: ArticleEvidence;
 };
 
 export type VaultLink = {

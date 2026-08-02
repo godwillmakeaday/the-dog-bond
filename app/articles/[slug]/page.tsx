@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticleAuthority } from "@/components/ArticleAuthority";
+import { ArticleEvidence } from "@/components/ArticleEvidence";
 import { ArticleJsonLd } from "@/components/ArticleJsonLd";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
@@ -85,6 +86,8 @@ export default async function ArticleBriefPage(props: { params: Promise<{ slug: 
                 <strong>Educational note:</strong> {article.disclaimer}
               </div>
             ) : null}
+          <ArticleEvidence evidence={article.evidence} />
+
           </div>
         </section>
       </article>

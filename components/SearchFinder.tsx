@@ -76,6 +76,34 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
       .map(({ item }) => item);
   }, [query, type]);
 
+  const getMatchContext = (item: SearchItem) => {
+    const q = query.trim().toLowerCase();
+
+    if (!q) return "";
+
+    const matchingKeyword = item.keywords.find((keyword) =>
+      keyword.toLowerCase().includes(q),
+    );
+
+    if (item.title.toLowerCase().includes(q)) {
+      return `Title matches “${query.trim()}”`;
+    }
+
+    if (matchingKeyword) {
+      return `Related keyword: ${matchingKeyword}`;
+    }
+
+    if (item.category.toLowerCase().includes(q)) {
+      return `Found in ${item.category}`;
+    }
+
+    if (item.description.toLowerCase().includes(q)) {
+      return "Matched in the description";
+    }
+
+    return "Related to your search";
+  };
+
   return (
     <section className="bg-earth-50 px-5 py-16 lg:px-8">
       <div className="mx-auto max-w-7xl">
@@ -131,6 +159,12 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
               <p className="mt-3 text-base leading-7 text-earth-700">
                 {item.description}
               </p>
+
+              {query.trim() ? (
+                <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-forest-900">
+                  Why this matched · {getMatchContext(item)}
+                </p>
+              ) : null}
 
               <span className="mt-6 inline-flex items-center gap-2 border-t border-earth-200 pt-4 text-xs font-bold uppercase tracking-[0.18em] text-earth-700 transition group-hover:text-earth-950">
                 Open result

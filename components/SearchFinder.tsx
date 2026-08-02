@@ -126,6 +126,57 @@ const fuzzyScore = (queryValue: string, candidateValue: string) => {
 
   return distance === 1 ? 22 : 14;
 };
+const synonymGroups = [
+  ["alsatian", "german shepherd"],
+  ["vet", "veterinarian", "veterinary"],
+  ["guard dog", "protection dog", "security dog"],
+  ["puppy", "young dog"],
+  ["children", "kids"],
+  ["cost", "price", "expense"],
+  ["training", "obedience"],
+  ["aggressive", "reactive"],
+  ["local dog", "indigenous dog", "african village dog"],
+];
+
+const expandQuery = (queryValue: string) => {
+  const normalizedQuery = queryValue.trim().toLowerCase();
+
+  if (!normalizedQuery) return [];
+
+  const expandedQueries = new Set<string>([normalizedQuery]);
+
+  for (const group of synonymGroups) {
+    const groupMatches = group.some(
+      (term) =>
+        normalizedQuery === term ||
+        normalizedQuery.includes(term) ||
+        term.includes(normalizedQuery),
+    );
+
+    if (groupMatches) {
+      for (const term of group) {
+        expandedQueries.add(term);
+      }
+    }
+  }
+
+  return Array.from(expandedQueries);
+};
+
+const matchesExpandedQuery = (
+  candidateValue: string,
+  expandedQueries: string[],
+) => {
+  const normalizedCandidate = candidateValue
+    .trim()
+    .toLowerCase();
+
+  return expandedQueries.some(
+    (expandedQuery) =>
+      normalizedCandidate.includes(expandedQuery) ||
+      expandedQuery.includes(normalizedCandidate),
+  );
+};
 
 export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
   const [query, setQuery] = useState(initialQuery);
@@ -214,6 +265,7 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
 
   const autocompleteSuggestions = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
+    const expandedQueries = expandQuery(normalizedQuery);
 
     if (normalizedQuery.length < 2) return [];
 
@@ -242,7 +294,10 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
         return (
           normalizedCandidate !== normalizedQuery &&
           (
-            normalizedCandidate.includes(normalizedQuery) ||
+            matchesExpandedQuery(
+              normalizedCandidate,
+              expandedQueries,
+            ) ||
             fuzzyScore(normalizedQuery, normalizedCandidate) > 0 ||
             normalizedCandidate
               .split(/\s+/)
@@ -288,6 +343,7 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
+    const expandedQueries = expandQuery(q);
 
     const scoreItem = (item: SearchItem) => {
       if (!q) return 1;
@@ -320,6 +376,21 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
       else if (itemType.includes(q)) score += 10;
 
       if (description.includes(q)) score += 12;
+
+      for (const expandedQuery of expandedQueries) {
+        if (expandedQuery === q) continue;
+
+        if (title.includes(expandedQuery)) score += 28;
+        if (category.includes(expandedQuery)) score += 18;
+        if (itemType.includes(expandedQuery)) score += 12;
+        if (description.includes(expandedQuery)) score += 10;
+
+        for (const keyword of keywords) {
+          if (keyword.includes(expandedQuery)) {
+            score += 22;
+          }
+        }
+      }
 
       score += fuzzyScore(q, title);
       score += fuzzyScore(q, category);

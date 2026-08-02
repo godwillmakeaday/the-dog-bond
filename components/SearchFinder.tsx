@@ -16,6 +16,57 @@ const types = ["All", "Guide", "Tool", "Article", "Topic", "Glossary", "Mistake"
 
 type TypeFilter = (typeof types)[number];
 
+const editDistance = (left: string, right: string) => {
+  const rows = left.length + 1;
+  const columns = right.length + 1;
+  const matrix = Array.from({ length: rows }, () =>
+    Array<number>(columns).fill(0),
+  );
+
+  for (let row = 0; row < rows; row += 1) {
+    matrix[row][0] = row;
+  }
+
+  for (let column = 0; column < columns; column += 1) {
+    matrix[0][column] = column;
+  }
+
+  for (let row = 1; row < rows; row += 1) {
+    for (let column = 1; column < columns; column += 1) {
+      const substitutionCost =
+        left[row - 1] === right[column - 1] ? 0 : 1;
+
+      matrix[row][column] = Math.min(
+        matrix[row - 1][column] + 1,
+        matrix[row][column - 1] + 1,
+        matrix[row - 1][column - 1] + substitutionCost,
+      );
+    }
+  }
+
+  return matrix[left.length][right.length];
+};
+
+const fuzzyScore = (queryValue: string, candidateValue: string) => {
+  const normalizedQuery = queryValue.trim().toLowerCase();
+  const normalizedCandidate = candidateValue.trim().toLowerCase();
+
+  if (
+    normalizedQuery.length < 4 ||
+    normalizedCandidate.length < 4
+  ) {
+    return 0;
+  }
+
+  const distance = editDistance(normalizedQuery, normalizedCandidate);
+  const allowedDistance =
+    normalizedQuery.length >= 9 ? 2 : 1;
+
+  if (distance > allowedDistance) return 0;
+
+  return distance === 1 ? 22 : 14;
+};
+
 export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
   const [query, setQuery] = useState(initialQuery);
   const [type, setType] = useState<TypeFilter>("All");
@@ -130,14 +181,45 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
 
         return (
           normalizedCandidate !== normalizedQuery &&
-          normalizedCandidate.includes(normalizedQuery)
+          (
+            normalizedCandidate.includes(normalizedQuery) ||
+            fuzzyScore(normalizedQuery, normalizedCandidate) > 0 ||
+            normalizedCandidate
+              .split(/\s+/)
+              .some(
+                (word) =>
+                  fuzzyScore(normalizedQuery, word) > 0,
+              )
+          )
         );
       })
       .sort((a, b) => {
-        const aStarts = a.toLowerCase().startsWith(normalizedQuery);
-        const bStarts = b.toLowerCase().startsWith(normalizedQuery);
+        const normalizedA = a.toLowerCase();
+        const normalizedB = b.toLowerCase();
+        const aStarts = normalizedA.startsWith(normalizedQuery);
+        const bStarts = normalizedB.startsWith(normalizedQuery);
 
         if (aStarts !== bStarts) return aStarts ? -1 : 1;
+
+        const aContains = normalizedA.includes(normalizedQuery);
+        const bContains = normalizedB.includes(normalizedQuery);
+
+        if (aContains !== bContains) return aContains ? -1 : 1;
+
+        const aDistance = Math.min(
+          editDistance(normalizedQuery, normalizedA),
+          ...normalizedA
+            .split(/\s+/)
+            .map((word) => editDistance(normalizedQuery, word)),
+        );
+        const bDistance = Math.min(
+          editDistance(normalizedQuery, normalizedB),
+          ...normalizedB
+            .split(/\s+/)
+            .map((word) => editDistance(normalizedQuery, word)),
+        );
+
+        if (aDistance !== bDistance) return aDistance - bDistance;
 
         return a.length - b.length || a.localeCompare(b);
       })
@@ -179,6 +261,24 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
 
       if (description.includes(q)) score += 12;
 
+      score += fuzzyScore(q, title);
+      score += fuzzyScore(q, category);
+
+      for (const keyword of keywords) {
+        score += fuzzyScore(q, keyword);
+      }
+
+      const titleWords = title.split(/\s+/).filter(Boolean);
+      const categoryWords = category.split(/\s+/).filter(Boolean);
+
+      for (const titleWord of titleWords) {
+        score += fuzzyScore(q, titleWord);
+      }
+
+      for (const categoryWord of categoryWords) {
+        score += fuzzyScore(q, categoryWord);
+      }
+
       const queryWords = q.split(/\s+/).filter(Boolean);
 
       for (const word of queryWords) {
@@ -186,8 +286,24 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
         if (category.includes(word)) score += 5;
         if (description.includes(word)) score += 3;
 
+        for (const titleWord of titleWords) {
+          score += fuzzyScore(word, titleWord);
+        }
+
+        for (const categoryWord of categoryWords) {
+          score += fuzzyScore(word, categoryWord);
+        }
+
         for (const keyword of keywords) {
           if (keyword.includes(word)) score += 6;
+
+          score += fuzzyScore(word, keyword);
+
+          for (const keywordWord of keyword
+            .split(/\s+/)
+            .filter(Boolean)) {
+            score += fuzzyScore(word, keywordWord);
+          }
         }
       }
 

@@ -107,22 +107,40 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
           </div>
         </div>
 
-        <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {results.map((item) => (
-            <a key={item.href + item.title} href={item.href} className="rounded-[2rem] border border-earth-200 bg-white p-6 shadow-card transition hover:-translate-y-1 hover:border-earth-900">
-              <div className="flex flex-wrap gap-2">
-                <span className="rounded-full bg-earth-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-earth-700">{item.type}</span>
-                <span className="rounded-full bg-forest-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-forest-900">{item.category}</span>
+            <a
+              key={item.href + item.title}
+              href={item.href}
+              className="group flex h-full flex-col rounded-[2rem] border border-earth-200 bg-white p-5 shadow-card transition hover:-translate-y-1 hover:border-earth-900 sm:p-6"
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded-full bg-earth-100 px-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.14em] text-earth-700">
+                  {item.type}
+                </span>
+
+                <span className="rounded-full bg-forest-100 px-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.14em] text-forest-900">
+                  {item.category}
+                </span>
               </div>
-              <h2 className="mt-5 font-display text-2xl font-semibold leading-tight text-earth-950">{item.title}</h2>
-              <p className="mt-4 text-base leading-7 text-earth-700">{item.description}</p>
-              <span className="mt-5 inline-block text-xs font-bold uppercase tracking-[0.2em] text-earth-700">Open →</span>
+
+              <h2 className="mt-5 font-display text-2xl font-semibold leading-tight text-earth-950">
+                {item.title}
+              </h2>
+
+              <p className="mt-3 text-base leading-7 text-earth-700">
+                {item.description}
+              </p>
+
+              <span className="mt-6 inline-flex items-center gap-2 border-t border-earth-200 pt-4 text-xs font-bold uppercase tracking-[0.18em] text-earth-700 transition group-hover:text-earth-950">
+                Open result
+                <span aria-hidden="true">→</span>
+              </span>
             </a>
           ))}
         </div>
 
-
-{results.length === 0 ? (
+        {results.length === 0 ? (
   <div className="mt-8 rounded-[2rem] border border-earth-200 bg-white p-8 text-center shadow-card">
     <h2 className="font-display text-3xl font-semibold text-earth-950">
       No exact match yet.

@@ -30,7 +30,7 @@ const launchPathways = [
 export function HomeLaunchSections() {
   return (
     <>
-      <section className="bg-white px-5 py-16 lg:px-8">
+      <section className="bg-white px-5 py-14 sm:py-16 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-7xl">
           <p className="text-sm font-bold uppercase tracking-[0.28em] text-earth-500">Institutional front door</p>
           <h2 className="mt-4 max-w-4xl font-display text-4xl font-semibold leading-tight text-earth-950 md:text-6xl">What The Dog Bond Does</h2>
@@ -44,7 +44,7 @@ export function HomeLaunchSections() {
         </div>
       </section>
 
-      <section className="bg-earth-950 px-5 py-16 text-earth-50 lg:px-8">
+      <section className="bg-earth-950 px-5 py-14 text-earth-50 sm:py-16 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-7xl">
           <p className="text-sm font-bold uppercase tracking-[0.28em] text-earth-300">The Dog Bond Standard</p>
           <h2 className="mt-4 max-w-4xl font-display text-4xl font-semibold leading-tight md:text-6xl">Responsibility before breed power.</h2>
@@ -61,7 +61,7 @@ export function HomeLaunchSections() {
         </div>
       </section>
 
-      <section className="bg-earth-50 px-5 py-16 lg:px-8">
+      <section className="bg-earth-50 px-5 py-14 sm:py-16 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-7xl">
           <p className="text-sm font-bold uppercase tracking-[0.28em] text-earth-500">Launch-ready pathways</p>
           <h2 className="mt-4 max-w-4xl font-display text-4xl font-semibold leading-tight text-earth-950 md:text-6xl">Move through the platform with purpose.</h2>

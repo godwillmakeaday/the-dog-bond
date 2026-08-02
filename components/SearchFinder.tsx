@@ -177,9 +177,23 @@ const resultSummary = (() => {
           aria-activedescendant={
             activeIndex >= 0 ? `dogbond-result-${activeIndex}` : undefined
           }
-            placeholder="Try: guard dog, first-time owner, local African dog, heat water shade"
+placeholder="Try: guard dog, first-time owner, local African dog, heat water shade"
             className="mt-4 w-full rounded-2xl border border-earth-200 bg-earth-50 px-5 py-4 text-lg outline-none transition focus:border-earth-900"
           />
+{query && (
+  <div className="mt-3 flex justify-end">
+    <button
+      type="button"
+      onClick={() => {
+        setQuery("");
+        setActiveIndex(-1);
+      }}
+      className="rounded-full border border-earth-200 px-4 py-2 text-sm font-semibold text-earth-700 transition hover:border-earth-900 hover:text-earth-900"
+    >
+      Clear search
+    </button>
+  </div>
+)}
           <div className="mt-5 flex flex-wrap gap-2">
             {types.map((item) => (
               <button key={item} type="button" onClick={() => setType(item)} className={type === item ? "rounded-full bg-earth-900 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-earth-50" : "rounded-full border border-earth-200 bg-earth-50 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-earth-700"}>

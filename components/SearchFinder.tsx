@@ -566,6 +566,95 @@ const resultSummary = (() => {
     return "Related to your search";
   };
 
+  const getRecoverySuggestions = () => {
+    const normalizedQuery = query.trim().toLowerCase();
+
+    if (!normalizedQuery) {
+      return getSearchSuggestions();
+    }
+
+    const expandedQueries = expandQuery(normalizedQuery);
+
+    const candidates = Array.from(
+      new Map(
+        [
+          ...popularSearches,
+          ...searchIndex.flatMap((item) => [
+            item.title,
+            item.category,
+            ...item.keywords,
+          ]),
+        ]
+          .map((candidate) => candidate.trim())
+          .filter(Boolean)
+          .map((candidate) => [candidate.toLowerCase(), candidate]),
+      ).values(),
+    );
+
+    return candidates
+      .filter(
+        (candidate) =>
+          candidate.toLowerCase() !== normalizedQuery,
+      )
+      .map((candidate) => {
+        const normalizedCandidate = candidate.toLowerCase();
+        let score = 0;
+
+        if (normalizedCandidate.startsWith(normalizedQuery)) {
+          score += 100;
+        } else if (
+          normalizedCandidate.includes(normalizedQuery)
+        ) {
+          score += 80;
+        }
+
+        if (
+          matchesExpandedQuery(
+            normalizedCandidate,
+            expandedQueries,
+          )
+        ) {
+          score += 65;
+        }
+
+        score += fuzzyScore(
+          normalizedQuery,
+          normalizedCandidate,
+        );
+
+        for (const word of normalizedCandidate
+          .split(/\s+/)
+          .filter(Boolean)) {
+          score += fuzzyScore(normalizedQuery, word);
+        }
+
+        for (const queryWord of normalizedQuery
+          .split(/\s+/)
+          .filter(Boolean)) {
+          if (normalizedCandidate.includes(queryWord)) {
+            score += 18;
+          }
+
+          for (const candidateWord of normalizedCandidate
+            .split(/\s+/)
+            .filter(Boolean)) {
+            score += fuzzyScore(queryWord, candidateWord);
+          }
+        }
+
+        return { candidate, score };
+      })
+      .filter(({ score }) => score > 0)
+      .sort(
+        (a, b) =>
+          b.score - a.score ||
+          a.candidate.length - b.candidate.length ||
+          a.candidate.localeCompare(b.candidate),
+      )
+      .slice(0, 6)
+      .map(({ candidate }) => candidate);
+  };
+
   const getSearchSuggestions = () => {
     const normalizedQuery = query.trim().toLowerCase();
 
@@ -779,35 +868,80 @@ const resultSummary = (() => {
         </div>
 
         {results.length === 0 ? (
-        <div className="mt-8 rounded-[2rem] border border-earth-200 bg-white p-8 text-center shadow-card">
-          <h2 className="font-display text-3xl font-semibold text-earth-950">
-            {query.trim()
-              ? `No exact match for “${query.trim()}”.`
-              : "No exact match yet."}
-          </h2>
+          <div className="mt-8 overflow-hidden rounded-[2rem] border border-earth-200 bg-white shadow-card">
+            <div className="border-b border-earth-200 bg-earth-50 p-8 text-center">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-earth-500">
+                Search recovery
+              </p>
 
-          <p className="mt-3 text-earth-700">
-            Try another phrase or continue with one of these related searches.
-          </p>
+              <h2 className="mt-3 font-display text-3xl font-semibold text-earth-950">
+                {query.trim()
+                  ? `We could not find an exact result for “${query.trim()}”.`
+                  : "No exact match yet."}
+              </h2>
 
-          <p className="mt-6 text-xs font-bold uppercase tracking-[0.18em] text-earth-500">
-            Suggested searches
-          </p>
+              <p className="mx-auto mt-3 max-w-2xl text-earth-700">
+                Try one of the closest related searches below. These suggestions
+                use nearby wording, recognised synonyms, and spelling similarity.
+              </p>
+            </div>
 
-          <div className="mt-4 flex flex-wrap justify-center gap-3">
-            {getSearchSuggestions().map((term) => (
-              <button
-                key={term}
-                type="button"
-                onClick={() => selectSearch(term)}
-                className="rounded-full bg-forest-100 px-4 py-2 text-sm font-semibold text-forest-900 transition hover:bg-forest-200"
-              >
-                {term}
-              </button>
-            ))}
+            <div className="p-8">
+              <p className="text-center text-xs font-bold uppercase tracking-[0.18em] text-earth-500">
+                Try these instead
+              </p>
+
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                {getRecoverySuggestions().map((term, index) => (
+                  <button
+                    key={term}
+                    type="button"
+                    onClick={() => selectSearch(term)}
+                    className="flex items-center justify-between gap-4 rounded-2xl border border-earth-200 bg-white px-5 py-4 text-left transition hover:-translate-y-0.5 hover:border-earth-900 hover:shadow-card"
+                  >
+                    <span>
+                      <span className="block text-[0.68rem] font-bold uppercase tracking-[0.16em] text-earth-500">
+                        {index === 0
+                          ? "Closest suggestion"
+                          : "Related search"}
+                      </span>
+
+                      <span className="mt-1 block font-semibold text-earth-950">
+                        {term}
+                      </span>
+                    </span>
+
+                    <span
+                      aria-hidden="true"
+                      className="text-earth-500"
+                    >
+                      →
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="mt-8 border-t border-earth-200 pt-6">
+                <p className="text-center text-xs font-bold uppercase tracking-[0.18em] text-earth-500">
+                  Explore popular searches
+                </p>
+
+                <div className="mt-4 flex flex-wrap justify-center gap-3">
+                  {getSearchSuggestions().map((term) => (
+                    <button
+                      key={term}
+                      type="button"
+                      onClick={() => selectSearch(term)}
+                      className="rounded-full bg-forest-100 px-4 py-2 text-sm font-semibold text-forest-900 transition hover:bg-forest-200"
+                    >
+                      {term}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      ) : null}
+        ) : null}
       </div>
     </section>
   );

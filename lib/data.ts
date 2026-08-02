@@ -1562,4 +1562,4 @@ export const decisionGuides = [
   },
 ] as const;
 
-export type DecisionGuide = (typeof decisionGuides)[number];
+export type DecisionGuide = (typeof decisionGuides)[number] & { evidence?: ArticleEvidence };

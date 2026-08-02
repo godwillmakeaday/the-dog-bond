@@ -3,6 +3,12 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { PageHero } from "@/components/PageHero";
 import { RelatedLinks } from "@/components/RelatedLinks";
+import {
+  defaultArticleAuthority,
+  editorialStandards,
+  paulMagaji,
+  publisher,
+} from "@/lib/authority";
 
 export const metadata: Metadata = {
   title: "About The Dog Bond",
@@ -29,6 +35,59 @@ export default function AboutPage() {
             <div className="mt-6 flex flex-wrap gap-3">{covers.map((item) => <span key={item} className="rounded-full bg-white/10 px-4 py-2 text-sm font-semibold">{item}</span>)}</div>
             <h2 className="mt-10 font-display text-4xl font-semibold">What we do not do</h2>
             <div className="mt-6 flex flex-wrap gap-3">{notDo.map((item) => <span key={item} className="rounded-full bg-white/10 px-4 py-2 text-sm font-semibold">No {item}</span>)}</div>
+          </div>
+        </div>
+      </section>
+      <section className="bg-earth-50 px-5 py-16 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="max-w-3xl">
+            <p className="text-sm font-bold uppercase tracking-[0.22em] text-earth-600">
+              Authority and accountability
+            </p>
+            <h2 className="mt-4 font-display text-4xl font-semibold text-earth-950 md:text-5xl">
+              Who publishes The Dog Bond
+            </h2>
+            <p className="mt-5 text-lg leading-8 text-earth-700">
+              {publisher.name} is published as an educational dog-ownership
+              platform by {publisher.legalPublisher}. Its founder and legal
+              editor is {paulMagaji.name}, a Nigerian barrister whose work here
+              focuses on ownership responsibility, household decisions,
+              contracts, institutional policy, public safety, and the legal
+              consequences of living with dogs.
+            </p>
+          </div>
+
+          <div className="mt-10 grid gap-6 lg:grid-cols-3">
+            <article className="rounded-[2rem] border border-earth-200 bg-white p-7 shadow-card">
+              <h3 className="font-display text-2xl font-semibold text-earth-950">
+                Editorial responsibility
+              </h3>
+              <p className="mt-4 leading-7 text-earth-700">
+                {editorialStandards.evidence}
+              </p>
+            </article>
+
+            <article className="rounded-[2rem] border border-earth-200 bg-white p-7 shadow-card">
+              <h3 className="font-display text-2xl font-semibold text-earth-950">
+                Professional boundaries
+              </h3>
+              <p className="mt-4 leading-7 text-earth-700">
+                {defaultArticleAuthority.veterinaryReviewStatus}. Veterinary,
+                behavioural, training, and welfare claims are not described as
+                professionally reviewed unless a qualified reviewer is
+                expressly identified.
+              </p>
+            </article>
+
+            <article className="rounded-[2rem] border border-earth-200 bg-white p-7 shadow-card">
+              <h3 className="font-display text-2xl font-semibold text-earth-950">
+                Corrections and independence
+              </h3>
+              <p className="mt-4 leading-7 text-earth-700">
+                {editorialStandards.corrections}{" "}
+                {editorialStandards.conflicts}
+              </p>
+            </article>
           </div>
         </div>
       </section>

@@ -1,8 +1,11 @@
-"use client";
++"use client";
 
 import { useMemo, useState } from "react";
-import { popularSearches, searchIndex } from "@/lib/search";
-
+import {
+  popularSearches,
+  searchIndex,
+  type SearchItem,
+} from "@/lib/search";
 const types = ["All", "Guide", "Tool", "Article", "Topic", "Glossary", "Mistake", "Breed", "Partner", "Campaign", "Page"] as const;
 
 type TypeFilter = (typeof types)[number];
@@ -13,12 +16,64 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return searchIndex.filter((item) => {
-      const typeMatch = type === "All" || item.type === type;
-      const text = [item.title, item.type, item.category, item.description, ...item.keywords].join(" ").toLowerCase();
-      const queryMatch = !q || text.includes(q);
-      return typeMatch && queryMatch;
-    });
+
+    const scoreItem = (item: SearchItem) => {
+      if (!q) return 1;
+
+      const title = item.title.toLowerCase();
+      const itemType = item.type.toLowerCase();
+      const category = item.category.toLowerCase();
+      const description = item.description.toLowerCase();
+      const keywords = item.keywords.map((keyword) =>
+        keyword.toLowerCase(),
+      );
+
+      let score = 0;
+
+      if (title === q) score += 120;
+      else if (title.startsWith(q)) score += 90;
+      else if (title.includes(q)) score += 65;
+
+      if (keywords.includes(q)) score += 55;
+
+      for (const keyword of keywords) {
+        if (keyword.startsWith(q)) score += 30;
+        else if (keyword.includes(q)) score += 18;
+      }
+
+      if (category === q) score += 35;
+      else if (category.includes(q)) score += 18;
+
+      if (itemType === q) score += 25;
+      else if (itemType.includes(q)) score += 10;
+
+      if (description.includes(q)) score += 12;
+
+      const queryWords = q.split(/\s+/).filter(Boolean);
+
+      for (const word of queryWords) {
+        if (title.includes(word)) score += 12;
+        if (category.includes(word)) score += 5;
+        if (description.includes(word)) score += 3;
+
+        for (const keyword of keywords) {
+          if (keyword.includes(word)) score += 6;
+        }
+      }
+
+      return score;
+    };
+
+    return searchIndex
+      .filter((item) => type === "All" || item.type === type)
+      .map((item, index) => ({
+        item,
+        index,
+        score: scoreItem(item),
+      }))
+      .filter(({ score }) => !q || score > 0)
+      .sort((a, b) => b.score - a.score || a.index - b.index)
+      .map(({ item }) => item);
   }, [query, type]);
 
   return (

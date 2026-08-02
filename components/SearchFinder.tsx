@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState, type KeyboardEvent } from "react";
 import {
   popularSearches,
   searchIndex,
@@ -13,6 +13,8 @@ type TypeFilter = (typeof types)[number];
 export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
   const [query, setQuery] = useState(initialQuery);
   const [type, setType] = useState<TypeFilter>("All");
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const resultRefs = useRef<Array<HTMLAnchorElement | null>>([]);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -75,6 +77,41 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
       .sort((a, b) => b.score - a.score || a.index - b.index)
       .map(({ item }) => item);
   }, [query, type]);
+  const moveToResult = (index: number) => {
+    if (results.length === 0) return;
+
+    const nextIndex = (index + results.length) % results.length;
+    setActiveIndex(nextIndex);
+    resultRefs.current[nextIndex]?.focus();
+  };
+
+  const handleSearchKeyDown = (
+    event: KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      moveToResult(activeIndex + 1);
+      return;
+    }
+
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      moveToResult(activeIndex <= 0 ? results.length - 1 : activeIndex - 1);
+      return;
+    }
+
+    if (event.key === "Enter" && activeIndex >= 0) {
+      event.preventDefault();
+      resultRefs.current[activeIndex]?.click();
+      return;
+    }
+
+    if (event.key === "Escape") {
+      setQuery("");
+      setActiveIndex(-1);
+    }
+  };
+
 
   const getMatchContext = (item: SearchItem) => {
     const q = query.trim().toLowerCase();
@@ -112,7 +149,15 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
           <input
             id="dogbond-search"
             value={query}
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) => {
+            setQuery(event.target.value);
+            setActiveIndex(-1);
+          }}
+          onKeyDown={handleSearchKeyDown}
+          aria-controls="dogbond-search-results"
+          aria-activedescendant={
+            activeIndex >= 0 ? `dogbond-result-${activeIndex}` : undefined
+          }
             placeholder="Try: guard dog, first-time owner, local African dog, heat water shade"
             className="mt-4 w-full rounded-2xl border border-earth-200 bg-earth-50 px-5 py-4 text-lg outline-none transition focus:border-earth-900"
           />
@@ -135,11 +180,19 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
           </div>
         </div>
 
-        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {results.map((item) => (
-            <a
-              key={item.href + item.title}
-              href={item.href}
+        <div
+        id="dogbond-search-results"
+        className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3"
+      >
+        {results.map((item, index) => (
+          <a
+            key={item.href + item.title}
+            id={`dogbond-result-${index}`}
+            ref={(element) => {
+              resultRefs.current[index] = element;
+            }}
+            href={item.href}
+            onFocus={() => setActiveIndex(index)}
               className="group flex h-full flex-col rounded-[2rem] border border-earth-200 bg-white p-5 shadow-card transition hover:-translate-y-1 hover:border-earth-900 sm:p-6"
             >
               <div className="flex flex-wrap items-center gap-2">

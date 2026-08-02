@@ -14,6 +14,8 @@ export type ArticleBrief = {
   takeaway: string;
   related?: RelatedArticleLink[];
   disclaimer?: string;
+  publishedAt?: string;
+  updatedAt?: string;
 };
 
 export type VaultLink = {

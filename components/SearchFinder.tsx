@@ -129,6 +129,25 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
     if (matchingKeyword) {
       return `Related keyword: ${matchingKeyword}`;
     }
+const resultSummary = (() => {
+  const trimmedQuery = query.trim();
+  const count = results.length;
+  const resultLabel = count === 1 ? "result" : "results";
+
+  if (!trimmedQuery && type === "All") {
+    return `${count} ${resultLabel} available`;
+  }
+
+  if (!trimmedQuery) {
+    return `${count} ${type.toLowerCase()} ${resultLabel}`;
+  }
+
+  if (type === "All") {
+    return `${count} ${resultLabel} for “${trimmedQuery}”`;
+  }
+
+  return `${count} ${type.toLowerCase()} ${resultLabel} for “${trimmedQuery}”`;
+})();
 
     if (item.category.toLowerCase().includes(q)) {
       return `Found in ${item.category}`;

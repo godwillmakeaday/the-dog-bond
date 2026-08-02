@@ -1,8 +1,18 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { navItems, site } from "@/lib/site";
 
 export function Header() {
+  const pathname = usePathname();
+
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
+
   return (
     <>
       <header className="relative z-40 border-b border-earth-200/70 bg-earth-50/92 backdrop-blur-xl lg:sticky lg:top-0 lg:z-50">
@@ -35,23 +45,32 @@ export function Header() {
             className="hidden items-center gap-4 lg:flex"
             aria-label="Main navigation"
           >
-            {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="text-xs font-semibold text-earth-700 transition hover:text-earth-950 xl:text-sm"
-              >
-                {item.label}
-              </a>
-            ))}
+            {navItems.map((item) => {
+              const active = isActive(item.href);
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  className={
+                    active
+                      ? "text-xs font-bold text-earth-950 xl:text-sm"
+                      : "text-xs font-semibold text-earth-700 transition hover:text-earth-950 xl:text-sm"
+                  }
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
 
-          <a
+          <Link
             href="/start-here"
             className="shrink-0 rounded-full bg-earth-900 px-4 py-2.5 text-[0.7rem] font-bold uppercase tracking-[0.12em] text-earth-50 shadow-card transition hover:-translate-y-0.5 hover:bg-forest-900 sm:px-5 sm:py-3 sm:text-sm"
           >
             Start Here
-          </a>
+          </Link>
         </div>
       </header>
 
@@ -60,15 +79,24 @@ export function Header() {
         aria-label="Mobile navigation"
       >
         <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-2.5 sm:gap-3 sm:px-5 sm:py-3">
-          {navItems.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="shrink-0 rounded-full border border-earth-200 bg-white/70 px-3.5 py-2 text-xs font-bold text-earth-700 sm:px-4"
-            >
-              {item.label}
-            </a>
-          ))}
+          {navItems.map((item) => {
+            const active = isActive(item.href);
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                className={
+                  active
+                    ? "shrink-0 rounded-full border border-earth-900 bg-earth-900 px-3.5 py-2 text-xs font-bold text-earth-50 shadow-sm sm:px-4"
+                    : "shrink-0 rounded-full border border-earth-200 bg-white/70 px-3.5 py-2 text-xs font-bold text-earth-700 transition hover:border-earth-300 hover:bg-white sm:px-4"
+                }
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </div>
       </nav>
     </>

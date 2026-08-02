@@ -1,6 +1,12 @@
 "use client";
 
-import { useMemo, useRef, useState, type KeyboardEvent } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent,
+} from "react";
 import {
   popularSearches,
   searchIndex,
@@ -15,6 +21,34 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
   const [type, setType] = useState<TypeFilter>("All");
   const [activeIndex, setActiveIndex] = useState(-1);
   const resultRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const trimmedQuery = query.trim();
+
+    if (trimmedQuery) {
+      url.searchParams.set("q", trimmedQuery);
+    } else {
+      url.searchParams.delete("q");
+    }
+
+    const nextUrl = `${url.pathname}${url.search}${url.hash}`;
+    window.history.replaceState(window.history.state, "", nextUrl);
+  }, [query]);
+
+  useEffect(() => {
+    const restoreQueryFromUrl = () => {
+      const url = new URL(window.location.href);
+      setQuery(url.searchParams.get("q") ?? "");
+      setActiveIndex(-1);
+    };
+
+    window.addEventListener("popstate", restoreQueryFromUrl);
+
+    return () => {
+      window.removeEventListener("popstate", restoreQueryFromUrl);
+    };
+  }, []);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();

@@ -17,6 +17,8 @@ import {
   percentage,
   type SearchCount,
 } from "@/lib/search/dashboard";
+import { searchIndex } from "@/lib/search";
+import { classifySearchGap } from "@/lib/search/gaps";
 
 export function SearchInsightsDashboard() {
   const entries = useSyncExternalStore(
@@ -44,10 +46,29 @@ export function SearchInsightsDashboard() {
       (entry) => entry.query,
     ).slice(0, 20);
 
-    const contentGaps = countValues(
-      zeroResultEntries,
-      (entry) => entry.query,
-    ).slice(0, 20);
+    const classifiedGaps = zeroResultEntries.map((entry) => ({
+  entry,
+  classification: classifySearchGap({
+    query: entry.query,
+    searchItems: searchIndex,
+    activeType: entry.type,
+  }),
+}));
+
+const contentGaps = countValues(
+  classifiedGaps
+    .filter(
+      ({ classification }) =>
+        classification.type === "missing-content",
+    )
+    .map(({ entry }) => entry),
+  (entry) => entry.query,
+).slice(0, 20);
+
+const gapTypes = countValues(
+  classifiedGaps,
+  ({ classification }) => classification.type,
+);
 
     const filterUsage = countValues(
       entries,
@@ -64,6 +85,7 @@ export function SearchInsightsDashboard() {
       averageResults,
       topSearches,
       contentGaps,
+gapTypes,
       filterUsage,
       mostUsedFilter,
       recentEntries: entries.slice(0, 20),

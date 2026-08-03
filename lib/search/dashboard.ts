@@ -1,13 +1,13 @@
-import type { SearchAnalyticsEntry } from "@/lib/search/analytics";
+
 
 export type SearchCount = {
   label: string;
   count: number;
 };
 
-export const countValues = (
-  entries: SearchAnalyticsEntry[],
-  getValue: (entry: SearchAnalyticsEntry) => string,
+export const countValues = <T>(
+  entries: T[],
+  getValue: (entry: T) => string,
 ): SearchCount[] => {
   const counts = new Map<
     string,

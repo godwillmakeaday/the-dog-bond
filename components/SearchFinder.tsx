@@ -20,114 +20,30 @@ import {
   expandQuery,
   matchesExpandedQuery,
 } from "@/lib/search/synonyms";
+import { recordSearchAnalytics } from "@/lib/search/analytics";
+import {
+  clearRecentSearches as clearStoredRecentSearches,
+  loadRecentSearches,
+  saveRecentSearch as saveStoredRecentSearch,
+} from "@/lib/search/storage";
 
 const types = ["All", "Guide", "Tool", "Article", "Topic", "Glossary", "Mistake", "Breed", "Partner", "Campaign", "Page"] as const;
 
 type TypeFilter = (typeof types)[number];
-
-type SearchAnalyticsEntry = {
-  query: string;
-  type: TypeFilter;
-  resultCount: number;
-  zeroResults: boolean;
-  createdAt: string;
-};
-
-const searchAnalyticsStorageKey = "dogbond-search-analytics";
-
-const recordSearchAnalytics = (
-  query: string,
-  type: TypeFilter,
-  resultCount: number,
-) => {
-  const trimmedQuery = query.trim();
-
-  if (trimmedQuery.length < 2) return;
-
-  try {
-    const stored = window.localStorage.getItem(
-      searchAnalyticsStorageKey,
-    );
-    const parsed = stored ? JSON.parse(stored) : [];
-    const currentEntries: SearchAnalyticsEntry[] =
-      Array.isArray(parsed) ? parsed : [];
-
-    const mostRecent = currentEntries[0];
-    const now = Date.now();
-
-    if (
-      mostRecent &&
-      mostRecent.query.toLowerCase() ===
-        trimmedQuery.toLowerCase() &&
-      mostRecent.type === type &&
-      mostRecent.resultCount === resultCount &&
-      now - new Date(mostRecent.createdAt).getTime() < 5000
-    ) {
-      return;
-    }
-
-    const entry: SearchAnalyticsEntry = {
-      query: trimmedQuery,
-      type,
-      resultCount,
-      zeroResults: resultCount === 0,
-      createdAt: new Date(now).toISOString(),
-    };
-
-    const nextEntries = [entry, ...currentEntries].slice(0, 100);
-
-    window.localStorage.setItem(
-      searchAnalyticsStorageKey,
-      JSON.stringify(nextEntries),
-    );
-  } catch {
-    return;
-  }
-};
 
 export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
   const [query, setQuery] = useState(initialQuery);
   const [type, setType] = useState<TypeFilter>("All");
   const [activeIndex, setActiveIndex] = useState(-1);
   const [isAutocompleteOpen, setIsAutocompleteOpen] = useState(false);
-  const [recentSearches, setRecentSearches] = useState<string[]>(() => {
-    if (typeof window === "undefined") return [];
-
-    try {
-      const stored = window.localStorage.getItem("dogbond-recent-searches");
-      const parsed: unknown = stored ? JSON.parse(stored) : [];
-
-      if (!Array.isArray(parsed)) return [];
-
-      return parsed
-        .filter((item): item is string => typeof item === "string")
-        .slice(0, 6);
-    } catch {
-      return [];
-    }
-  });
+  const [recentSearches, setRecentSearches] =
+    useState<string[]>(loadRecentSearches);
   const resultRefs = useRef<Array<HTMLAnchorElement | null>>([]);
 
   const saveRecentSearch = (term: string) => {
-    const trimmedTerm = term.trim();
-
-    if (trimmedTerm.length < 2) return;
-
-    setRecentSearches((current) => {
-      const next = [
-        trimmedTerm,
-        ...current.filter(
-          (item) => item.toLowerCase() !== trimmedTerm.toLowerCase(),
-        ),
-      ].slice(0, 6);
-
-      window.localStorage.setItem(
-        "dogbond-recent-searches",
-        JSON.stringify(next),
-      );
-
-      return next;
-    });
+    setRecentSearches((current) =>
+      saveStoredRecentSearch(term, current),
+    );
   };
 
   const selectSearch = (term: string) => {
@@ -138,8 +54,7 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
   };
 
   const clearRecentSearches = () => {
-    setRecentSearches([]);
-    window.localStorage.removeItem("dogbond-recent-searches");
+    setRecentSearches(clearStoredRecentSearches());
   };
 
   useEffect(() => {

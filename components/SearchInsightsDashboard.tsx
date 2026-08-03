@@ -19,6 +19,7 @@ import {
 } from "@/lib/search/dashboard";
 import { searchIndex } from "@/lib/search";
 import { classifySearchGap } from "@/lib/search/gaps";
+import { buildSearchOpportunityBacklog } from "@/lib/search/opportunities";
 
 export function SearchInsightsDashboard() {
   const entries = useSyncExternalStore(
@@ -70,7 +71,11 @@ const gapTypes = countValues(
   ({ classification }) => classification.type,
 );
 
-    const filterUsage = countValues(
+
+    const opportunities =
+      buildSearchOpportunityBacklog(contentGaps);
+
+const filterUsage = countValues(
       entries,
       (entry) =>
         entry.type === "All" ? "All content" : entry.type,
@@ -86,6 +91,7 @@ const gapTypes = countValues(
       topSearches,
       contentGaps,
 gapTypes,
+      opportunities,
       filterUsage,
       mostUsedFilter,
       recentEntries: entries.slice(0, 20),
@@ -408,7 +414,68 @@ gapTypes,
               </article>
             </section>
 
-            <section className="mt-8 grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
+            <section className="mt-8 rounded-[2.5rem] border border-earth-200 bg-white p-7 shadow-card md:p-8">
+          <p className="text-xs font-bold uppercase tracking-[0.20em] text-earth-500">
+            Product intelligence
+          </p>
+
+          <h2 className="mt-3 font-display text-3xl font-semibold text-earth-950">
+            What The Dog Bond should build next
+          </h2>
+
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-earth-600">
+            Zero-result searches are converted into a prioritized editorial and product backlog.
+            Frequency, safety relevance, ownership decisions, and likely format all affect priority.
+          </p>
+
+          {insights.opportunities.length === 0 ? (
+            <p className="mt-6 text-sm leading-6 text-earth-600">
+              No genuine missing-content opportunities have been recorded yet.
+            </p>
+          ) : (
+            <div className="mt-6 grid gap-4 lg:grid-cols-2">
+              {insights.opportunities.map((opportunity, index) => (
+                <article
+                  key={opportunity.query}
+                  className="rounded-2xl border border-earth-100 bg-earth-50 p-5"
+                >
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs font-bold text-earth-400">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+
+                    <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-earth-700">
+                      {opportunity.suggestedFormat}
+                    </span>
+
+                    <span className="rounded-full border border-earth-200 bg-white px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-earth-500">
+                      {opportunity.status}
+                    </span>
+
+                    <span className="ml-auto rounded-full bg-forest-700 px-3 py-1 text-xs font-bold text-white">
+                      Priority {opportunity.priorityScore}
+                    </span>
+                  </div>
+
+                  <h3 className="mt-4 break-words font-display text-2xl font-semibold text-earth-950">
+                    {opportunity.query}
+                  </h3>
+
+                  <p className="mt-3 text-sm leading-6 text-earth-600">
+                    {opportunity.reason}
+                  </p>
+
+                  <p className="mt-4 text-xs font-bold uppercase tracking-[0.14em] text-earth-500">
+                    {opportunity.frequency} failed
+                    {opportunity.frequency === 1 ? " search" : " searches"}
+                  </p>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <section className="mt-8 grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
               <article className="rounded-[2.5rem] border border-earth-200 bg-white p-7 shadow-card md:p-8">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-earth-500">
                   Search behaviour

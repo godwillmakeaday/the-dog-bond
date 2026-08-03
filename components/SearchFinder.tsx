@@ -32,6 +32,11 @@ import {
   loadRecentSearches,
   saveRecentSearch as saveStoredRecentSearch,
 } from "@/lib/search/storage";
+import {
+  getMatchContext as buildMatchContext,
+  getResultSummary,
+  splitHighlightParts,
+} from "@/lib/search/presentation";
 
 const types = ["All", "Guide", "Tool", "Article", "Topic", "Glossary", "Mistake", "Breed", "Partner", "Campaign", "Page"] as const;
 
@@ -151,74 +156,25 @@ export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {
   };
 
 
-  const highlightMatch = (text: string) => {
-    const trimmedQuery = query.trim();
-
-    if (!trimmedQuery) return text;
-
-    const escapedQuery = trimmedQuery.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const parts = text.split(new RegExp(`(${escapedQuery})`, "gi"));
-
-    return parts.map((part, index) =>
-      part.toLowerCase() === trimmedQuery.toLowerCase() ? (
+  const highlightMatch = (text: string) =>
+    splitHighlightParts(text, query).map((part, index) =>
+      part.matched ? (
         <mark
-          key={`${part}-${index}`}
+          key={`${part.text}-${index}`}
           className="rounded bg-forest-100 px-1 text-inherit"
         >
-          {part}
+          {part.text}
         </mark>
       ) : (
-        part
+        part.text
       ),
     );
-  };
 
-  const getMatchContext = (item: SearchItem) => {
-    const q = query.trim().toLowerCase();
+  const getMatchContext = (item: SearchItem) =>
+    buildMatchContext(item, query);
 
-    if (!q) return "";
-
-    const matchingKeyword = item.keywords.find((keyword) =>
-      keyword.toLowerCase().includes(q),
-    );
-
-    if (item.title.toLowerCase().includes(q)) {
-      return `Title matches “${query.trim()}”`;
-    }
-
-    if (matchingKeyword) {
-      return `Related keyword: ${matchingKeyword}`;
-    }
-const resultSummary = (() => {
-  const trimmedQuery = query.trim();
-  const count = results.length;
-  const resultLabel = count === 1 ? "result" : "results";
-
-  if (!trimmedQuery && type === "All") {
-    return `${count} ${resultLabel} available`;
-  }
-
-  if (!trimmedQuery) {
-    return `${count} ${type.toLowerCase()} ${resultLabel}`;
-  }
-
-  if (type === "All") {
-    return `${count} ${resultLabel} for “${trimmedQuery}”`;
-  }
-
-  return `${count} ${type.toLowerCase()} ${resultLabel} for “${trimmedQuery}”`;
-})();
-
-    if (item.category.toLowerCase().includes(q)) {
-      return `Found in ${item.category}`;
-    }
-
-    if (item.description.toLowerCase().includes(q)) {
-      return "Matched in the description";
-    }
-
-    return "Related to your search";
-  };
+  const resultSummary = () =>
+    getResultSummary(query, type, results.length);
 
   const getRecoverySuggestions = () =>
     buildRecoverySuggestions({

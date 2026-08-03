@@ -4,101 +4,17 @@ import {
   useMemo,
   useSyncExternalStore,
 } from "react";
-
-type SearchAnalyticsEntry = {
-  query: string;
-  type: string;
-  resultCount: number;
-  zeroResults: boolean;
-  createdAt: string;
-};
+import {
+  clearSearchAnalytics,
+  getSearchAnalyticsServerSnapshot,
+  readSearchAnalytics,
+  subscribeToSearchAnalytics,
+  type SearchAnalyticsEntry,
+} from "@/lib/search/analytics";
 
 type SearchCount = {
   label: string;
   count: number;
-};
-
-const storageKey = "dogbond-search-analytics";
-const updateEventName = "dogbond-search-analytics-updated";
-const emptyEntries: SearchAnalyticsEntry[] = [];
-
-let cachedRawValue: string | null = null;
-let cachedEntries: SearchAnalyticsEntry[] = emptyEntries;
-
-const isAnalyticsEntry = (
-  value: unknown,
-): value is SearchAnalyticsEntry => {
-  if (!value || typeof value !== "object") return false;
-
-  const entry = value as Partial<SearchAnalyticsEntry>;
-
-  return (
-    typeof entry.query === "string" &&
-    typeof entry.type === "string" &&
-    typeof entry.resultCount === "number" &&
-    typeof entry.zeroResults === "boolean" &&
-    typeof entry.createdAt === "string"
-  );
-};
-
-const readAnalyticsEntries = () => {
-  if (typeof window === "undefined") return emptyEntries;
-
-  try {
-    const rawValue = window.localStorage.getItem(storageKey);
-
-    if (rawValue === cachedRawValue) {
-      return cachedEntries;
-    }
-
-    cachedRawValue = rawValue;
-
-    if (!rawValue) {
-      cachedEntries = emptyEntries;
-      return cachedEntries;
-    }
-
-    const parsed: unknown = JSON.parse(rawValue);
-
-    cachedEntries = Array.isArray(parsed)
-      ? parsed.filter(isAnalyticsEntry)
-      : emptyEntries;
-
-    return cachedEntries;
-  } catch {
-    cachedRawValue = null;
-    cachedEntries = emptyEntries;
-    return cachedEntries;
-  }
-};
-
-const subscribeToAnalytics = (onStoreChange: () => void) => {
-  if (typeof window === "undefined") {
-    return () => undefined;
-  }
-
-  const handleStorage = (event: StorageEvent) => {
-    if (event.key === storageKey) {
-      cachedRawValue = null;
-      onStoreChange();
-    }
-  };
-
-  const handleLocalUpdate = () => {
-    cachedRawValue = null;
-    onStoreChange();
-  };
-
-  window.addEventListener("storage", handleStorage);
-  window.addEventListener(updateEventName, handleLocalUpdate);
-
-  return () => {
-    window.removeEventListener("storage", handleStorage);
-    window.removeEventListener(
-      updateEventName,
-      handleLocalUpdate,
-    );
-  };
 };
 
 const countValues = (
@@ -152,9 +68,9 @@ const percentage = (count: number, total: number) => {
 
 export function SearchInsightsDashboard() {
   const entries = useSyncExternalStore(
-    subscribeToAnalytics,
-    readAnalyticsEntries,
-    () => emptyEntries,
+    subscribeToSearchAnalytics,
+    readSearchAnalytics,
+    getSearchAnalyticsServerSnapshot,
   );
 
   const insights = useMemo(() => {
@@ -184,7 +100,7 @@ export function SearchInsightsDashboard() {
     const filterUsage = countValues(
       entries,
       (entry) =>
-        entry.type === "ALL" ? "All content" : entry.type,
+        entry.type === "All" ? "All content" : entry.type,
     );
 
     const mostUsedFilter =
@@ -222,16 +138,7 @@ export function SearchInsightsDashboard() {
   };
 
   const clearAnalytics = () => {
-    const confirmed = window.confirm(
-      "Clear all locally stored search analytics on this device?",
-    );
-
-    if (!confirmed) return;
-
-    window.localStorage.removeItem(storageKey);
-    cachedRawValue = null;
-    cachedEntries = emptyEntries;
-    window.dispatchEvent(new Event(updateEventName));
+    clearSearchAnalytics();
   };
 
   const renderRankedList = (
@@ -529,7 +436,7 @@ export function SearchInsightsDashboard() {
                             </td>
 
                             <td className="py-4 pr-5">
-                              {entry.type === "ALL"
+                              {entry.type === "All"
                                 ? "All content"
                                 : entry.type}
                             </td>

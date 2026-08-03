@@ -309,6 +309,83 @@ gapTypes,
                   "No search terms have been recorded.",
                 )}
               </article>
+<section className="mt-8 rounded-[2.5rem] border border-earth-200 bg-white p-7 shadow-card md:p-8">
+  <p className="text-xs font-bold uppercase tracking-[0.20em] text-earth-500">
+    Failure diagnosis
+  </p>
+
+  <h2 className="mt-3 font-display text-3xl font-semibold text-earth-950">
+    Why searches failed
+  </h2>
+
+  <p className="mt-3 max-w-3xl text-sm leading-6 text-earth-600">
+    Zero-result searches are classified before they are treated as
+    content opportunities. This separates genuine knowledge gaps from
+    spelling, synonym, filter, and indexing problems.
+  </p>
+
+  <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+    {insights.gapTypes.length === 0 ? (
+      <p className="text-sm leading-6 text-earth-600">
+        No classified search failures have been recorded.
+      </p>
+    ) : (
+      insights.gapTypes.map((item) => (
+        <article
+          key={item.label}
+          className="rounded-2xl border border-earth-100 bg-earth-50 p-5"
+        >
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold text-earth-900">
+                {item.label
+                  .split("-")
+                  .map(
+                    (word) =>
+                      word.charAt(0).toUpperCase() + word.slice(1),
+                  )
+                  .join(" ")}
+              </p>
+
+              <p className="mt-2 text-xs leading-5 text-earth-500">
+                {item.label === "missing-content"
+                  ? "A likely editorial or product opportunity."
+                  : item.label === "spelling"
+                    ? "The user may have entered a misspelled term."
+                    : item.label === "synonym"
+                      ? "The index may not recognise an equivalent term."
+                      : item.label === "filter"
+                        ? "The selected content filter may have hidden a match."
+                        : item.label === "index"
+                          ? "Relevant content may exist but be missing from the search index."
+                          : "The cause could not yet be classified confidently."}
+              </p>
+            </div>
+
+            <span className="shrink-0 rounded-full bg-white px-3 py-1 text-xs font-bold text-earth-700">
+              {item.count}
+            </span>
+          </div>
+
+          <div className="mt-4 h-2 overflow-hidden rounded-full bg-earth-200">
+            <div
+              className="h-full rounded-full bg-forest-700"
+              style={{
+                width: `${Math.max(
+                  8,
+                  percentage(
+                    item.count,
+                    insights.zeroResultCount || 1,
+                  ),
+                )}%`,
+              }}
+            />
+          </div>
+        </article>
+      ))
+    )}
+  </div>
+</section>
 
               <article className="rounded-[2.5rem] border border-earth-200 bg-white p-7 shadow-card md:p-8">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-earth-500">

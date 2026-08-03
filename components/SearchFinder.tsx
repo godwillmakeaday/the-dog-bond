@@ -12,6 +12,15 @@ import {
   searchIndex,
   type SearchItem,
 } from "@/lib/search";
+import {
+  editDistance,
+  fuzzyScore,
+} from "@/lib/search/fuzzy";
+import {
+  expandQuery,
+  matchesExpandedQuery,
+} from "@/lib/search/synonyms";
+
 const types = ["All", "Guide", "Tool", "Article", "Topic", "Glossary", "Mistake", "Breed", "Partner", "Campaign", "Page"] as const;
 
 type TypeFilter = (typeof types)[number];
@@ -74,108 +83,6 @@ const recordSearchAnalytics = (
   } catch {
     return;
   }
-};
-
-const editDistance = (left: string, right: string) => {
-  const rows = left.length + 1;
-  const columns = right.length + 1;
-  const matrix = Array.from({ length: rows }, () =>
-    Array<number>(columns).fill(0),
-  );
-
-  for (let row = 0; row < rows; row += 1) {
-    matrix[row][0] = row;
-  }
-
-  for (let column = 0; column < columns; column += 1) {
-    matrix[0][column] = column;
-  }
-
-  for (let row = 1; row < rows; row += 1) {
-    for (let column = 1; column < columns; column += 1) {
-      const substitutionCost =
-        left[row - 1] === right[column - 1] ? 0 : 1;
-
-      matrix[row][column] = Math.min(
-        matrix[row - 1][column] + 1,
-        matrix[row][column - 1] + 1,
-        matrix[row - 1][column - 1] + substitutionCost,
-      );
-    }
-  }
-
-  return matrix[left.length][right.length];
-};
-
-const fuzzyScore = (queryValue: string, candidateValue: string) => {
-  const normalizedQuery = queryValue.trim().toLowerCase();
-  const normalizedCandidate = candidateValue.trim().toLowerCase();
-
-  if (
-    normalizedQuery.length < 4 ||
-    normalizedCandidate.length < 4
-  ) {
-    return 0;
-  }
-
-  const distance = editDistance(normalizedQuery, normalizedCandidate);
-  const allowedDistance =
-    normalizedQuery.length >= 9 ? 2 : 1;
-
-  if (distance > allowedDistance) return 0;
-
-  return distance === 1 ? 22 : 14;
-};
-const synonymGroups = [
-  ["alsatian", "german shepherd"],
-  ["vet", "veterinarian", "veterinary"],
-  ["guard dog", "protection dog", "security dog"],
-  ["puppy", "young dog"],
-  ["children", "kids"],
-  ["cost", "price", "expense"],
-  ["training", "obedience"],
-  ["aggressive", "reactive"],
-  ["local dog", "indigenous dog", "african village dog"],
-];
-
-const expandQuery = (queryValue: string) => {
-  const normalizedQuery = queryValue.trim().toLowerCase();
-
-  if (!normalizedQuery) return [];
-
-  const expandedQueries = new Set<string>([normalizedQuery]);
-
-  for (const group of synonymGroups) {
-    const groupMatches = group.some(
-      (term) =>
-        normalizedQuery === term ||
-        normalizedQuery.includes(term) ||
-        term.includes(normalizedQuery),
-    );
-
-    if (groupMatches) {
-      for (const term of group) {
-        expandedQueries.add(term);
-      }
-    }
-  }
-
-  return Array.from(expandedQueries);
-};
-
-const matchesExpandedQuery = (
-  candidateValue: string,
-  expandedQueries: string[],
-) => {
-  const normalizedCandidate = candidateValue
-    .trim()
-    .toLowerCase();
-
-  return expandedQueries.some(
-    (expandedQuery) =>
-      normalizedCandidate.includes(expandedQuery) ||
-      expandedQuery.includes(normalizedCandidate),
-  );
 };
 
 export function SearchFinder({ initialQuery = "" }: { initialQuery?: string }) {

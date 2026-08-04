@@ -6,7 +6,8 @@ import { StaticContactCTA } from "@/components/StaticContactCTA";
 
 export const metadata: Metadata = {
   title: "Get Dog Bond Updates",
-  description: "A static updates page for future Dog Bond guides, breed pages, Nigerian dog ownership notes, public safety education, and partner announcements."
+  description: "A static updates page for future Dog Bond guides, breed pages, Nigerian dog ownership notes, public safety education, and partner announcements.",
+  robots: { index: false, follow: true }
 };
 
 const updates = [

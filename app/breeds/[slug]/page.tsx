@@ -15,7 +15,14 @@ export function generateStaticParams() {
 export async function generateMetadata(props: Params): Promise<Metadata> {
   const params = await props.params;
   const breed = breedPages.find((item) => item.slug === params.slug);
-  return breed ? createPageMetadata({ title: breed.name, description: breed.summary, pathname: `/breeds/${breed.slug}` }) : { title: "Dog Breed" };
+  const indexedBreedSlugs = new Set(["rottweiler", "boerboel", "german-shepherd"]);
+  return breed ? createPageMetadata({
+    title: breed.name,
+    description: breed.summary,
+    pathname: `/breeds/${breed.slug}`,
+    noIndex: !indexedBreedSlugs.has(breed.slug),
+    followWhenNoIndex: true
+  }) : { title: "Dog Breed" };
 }
 
 export default async function BreedPage(props: Params) {

@@ -15,7 +15,7 @@ export function generateStaticParams() {
 export async function generateMetadata(props: Params): Promise<Metadata> {
   const params = await props.params;
   const mistake = ownerMistakes.find((item) => item.slug === params.slug);
-  return mistake ? createPageMetadata({ title: mistake.title, description: mistake.shortDescription, pathname: `/mistakes/${mistake.slug}` }) : { title: "Dog Owner Mistake" };
+  return mistake ? createPageMetadata({ title: mistake.title, description: mistake.shortDescription, pathname: `/mistakes/${mistake.slug}`, noIndex: true, followWhenNoIndex: true }) : { title: "Dog Owner Mistake" };
 }
 
 export default async function MistakePage(props: Params) {

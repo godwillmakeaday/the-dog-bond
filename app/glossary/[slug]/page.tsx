@@ -15,7 +15,7 @@ export function generateStaticParams() {
 export async function generateMetadata(props: Params): Promise<Metadata> {
   const params = await props.params;
   const term = glossaryTerms.find((item) => item.slug === params.slug);
-  return term ? createPageMetadata({ title: term.term, description: term.shortDefinition, pathname: `/glossary/${term.slug}` }) : { title: "Dog Ownership Glossary" };
+  return term ? createPageMetadata({ title: term.term, description: term.shortDefinition, pathname: `/glossary/${term.slug}`, noIndex: true, followWhenNoIndex: true }) : { title: "Dog Ownership Glossary" };
 }
 
 export default async function GlossaryTermPage(props: Params) {

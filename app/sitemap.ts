@@ -2,9 +2,6 @@ import type { MetadataRoute } from "next";
 import { decisionGuides } from "@/lib/data";
 import { breedPages } from "@/lib/breeds";
 import { campaignPages } from "@/lib/campaigns";
-import { glossaryTerms } from "@/lib/glossary";
-import { ownerMistakes } from "@/lib/mistakes";
-import { partnerCategories } from "@/lib/partners";
 import { site } from "@/lib/site";
 import { topicPages } from "@/lib/topics";
 
@@ -39,12 +36,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/partner-with-us",
     "/partners",
     "/share",
-    "/updates",
     "/campaigns",
-    "/directory",
     "/manifesto",
     "/press",
-    "/dog-readiness-brief",
     "/tools/cost-estimator",
     "/tools/breed-comparison",
     "/tools/readiness-checklist",
@@ -67,13 +61,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const guideRoutes = decisionGuides.map((guide) => `/guides/${guide.slug}`);
   const topicRoutes = topicPages.map((topic) => `/topics/${topic.slug}`);
-  const glossaryRoutes = glossaryTerms.map((term) => `/glossary/${term.slug}`);
-  const mistakeRoutes = ownerMistakes.map((mistake) => `/mistakes/${mistake.slug}`);
-  const breedRoutes = breedPages.map((breed) => `/breeds/${breed.slug}`);
-  const partnerRoutes = partnerCategories.map((partner) => `/partners/${partner.slug}`);
+  const indexedBreedSlugs = new Set(["rottweiler", "boerboel", "german-shepherd"]);
+  const breedRoutes = breedPages
+    .filter((breed) => indexedBreedSlugs.has(breed.slug))
+    .map((breed) => `/breeds/${breed.slug}`);
   const campaignRoutes = campaignPages.map((campaign) => `/campaigns/${campaign.slug}`);
 
-  return [...staticRoutes, ...articleRoutes, ...guideRoutes, ...topicRoutes, ...glossaryRoutes, ...mistakeRoutes, ...breedRoutes, ...partnerRoutes, ...campaignRoutes].map((route) => ({
+  return [...staticRoutes, ...articleRoutes, ...guideRoutes, ...topicRoutes, ...breedRoutes, ...campaignRoutes].map((route) => ({
     url: `${base}${route}`,
     lastModified: new Date("2026-07-06T15:55:27.561Z"),
     changeFrequency: route === "" ? "weekly" : "monthly",

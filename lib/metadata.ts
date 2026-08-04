@@ -6,9 +6,10 @@ type PageMetadata = {
   description: string;
   pathname: string;
   noIndex?: boolean;
+  followWhenNoIndex?: boolean;
 };
 
-export function createPageMetadata({ title, description, pathname, noIndex = false }: PageMetadata): Metadata {
+export function createPageMetadata({ title, description, pathname, noIndex = false, followWhenNoIndex = false }: PageMetadata): Metadata {
   const canonical = new URL(pathname, site.url).toString();
 
   return {
@@ -29,6 +30,6 @@ export function createPageMetadata({ title, description, pathname, noIndex = fal
       description,
       images: ["/opengraph-image"],
     },
-    robots: noIndex ? { index: false, follow: false } : undefined,
+    robots: noIndex ? { index: false, follow: followWhenNoIndex } : undefined,
   };
 }

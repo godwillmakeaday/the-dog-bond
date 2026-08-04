@@ -7,7 +7,8 @@ import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Dog Readiness Brief",
-  description: "A future downloadable checklist for choosing, preparing for, and responsibly managing a dog in your household."
+  description: "A future downloadable checklist for choosing, preparing for, and responsibly managing a dog in your household.",
+  robots: { index: false, follow: true }
 };
 
 export default function DogReadinessBriefPage() {

@@ -15,7 +15,7 @@ export function generateStaticParams() {
 export async function generateMetadata(props: Params): Promise<Metadata> {
   const params = await props.params;
   const category = partnerCategories.find((item) => item.slug === params.slug);
-  return category ? createPageMetadata({ title: category.title, description: category.summary, pathname: `/partners/${category.slug}` }) : { title: "Partner Category" };
+  return category ? createPageMetadata({ title: category.title, description: category.summary, pathname: `/partners/${category.slug}`, noIndex: true, followWhenNoIndex: true }) : { title: "Partner Category" };
 }
 
 export default async function PartnerCategoryPage(props: Params) {

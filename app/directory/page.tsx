@@ -6,7 +6,8 @@ import { DirectoryPlaceholder } from "@/components/DirectoryPlaceholder";
 
 export const metadata: Metadata = {
   title: "Dog Bond Directory",
-  description: "Future directory placeholder for responsible trainers, vets, shelters, breeders, estate partners, and education partners."
+  description: "Future directory placeholder for responsible trainers, vets, shelters, breeders, estate partners, and education partners.",
+  robots: { index: false, follow: true }
 };
 
 export default function DirectoryPage() {

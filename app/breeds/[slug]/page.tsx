@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BreedPageLayout } from "@/components/BreedPageLayout";
+import { RottweilerDossier } from "@/components/RottweilerDossier";
 import { breedPages } from "@/lib/breeds";
 import { createPageMetadata } from "@/lib/metadata";
 
@@ -29,5 +30,5 @@ export default async function BreedPage(props: Params) {
   const params = await props.params;
   const breed = breedPages.find((item) => item.slug === params.slug);
   if (!breed) notFound();
-  return <main><Header /><BreedPageLayout breed={breed} /><Footer /></main>;
+  return <main><Header />{breed.slug === "rottweiler" ? <RottweilerDossier /> : <BreedPageLayout breed={breed} />}<Footer /></main>;
 }
